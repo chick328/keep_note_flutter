@@ -6,10 +6,10 @@ import '../../presentation/bloc/listing/listing_bloc.dart';
 final locator = GetIt.instance;
 
 void configureBlocModuleDependencies() {
-  locator.registerLazySingleton<ListingBloc>(
+  locator.registerFactory<ListingBloc>(
           () => ListingBloc(noteRepository: locator())
   );
-  locator.registerLazySingleton<EditBloc>(
+  locator.registerFactory<EditBloc>(
           () => EditBloc(noteRepository: locator())
   );
 }
