@@ -23,19 +23,30 @@ class EditBloc extends Bloc<EditEvent, EditState>
       await event.map(
         onTitleChanged: (event) {
           emit(state.copyWith(note: state.note.copyWith(title: event.title)));
+          print(state);
         },
         onContentChanged: (event) {
           emit(
             state.copyWith(note: state.note.copyWith(content: event.content)),
           );
+          print(state);
         },
         fetchNoteById: (event) async {
           final result = await _noteRepository.getNoteById(event.id);
-          print(result);
           switch (result) {
             case Success<Note>():
               emit(state.copyWith(note: result.value));
             case Error():
+          }
+        },
+        saveNote: (_) async {
+          final currentNote = state.note;
+          if (currentNote.title != null || currentNote.content != null) {
+            final result = await _noteRepository.insertOrUpdateNote(state.note);
+            switch (result) {
+              case Success<void>():
+              case Error():
+            }
           }
         },
       );

@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/utils/utils.dart';
 
+import '../../domain/note/model/note.dart';
 import '../../domain/util/result.dart';
 import 'model/note_entity.dart';
 
@@ -78,10 +79,10 @@ class NoteDao {
     return list.first;
   }
 
-  Future<void> insert(String? title, String? content) async {
+  Future<void> insert(Note note) async {
     await _database.insert(_noteTableName, {
-      _titleColumnName: title ?? "",
-      _contentColumnName: content ?? "",
+      _titleColumnName: note.title ?? "",
+      _contentColumnName: note.content ?? "",
     });
   }
 
@@ -90,6 +91,20 @@ class NoteDao {
       _noteTableName,
       where: '$_idColumnName = ?',
       whereArgs: [id],
+    );
+  }
+
+  Future<void> update(Note note) async {
+    final NoteEntity noteEntity = note.toNoteEntity();
+    await _database.update(
+      _noteTableName,
+      {
+        _idColumnName: noteEntity.id,
+        _titleColumnName: noteEntity.title,
+        _contentColumnName: noteEntity.content,
+      },
+      where: '$_idColumnName = ?',
+      whereArgs: [note.id],
     );
   }
 
@@ -111,9 +126,17 @@ class NoteDao {
       int count = await countRows();
       if (count == 0) {
         for (int i = 1; i <= 50; i++) {
-          await insert("title $i", "content $i");
+          await insert(Note(title: "title $i", content: "content $i"));
         }
       }
     } on Exception catch (e) {}
   }
+  //
+  // Map<String, dynamic> noteEntityToDbMap(NoteEntity note) {
+  //   return {
+  //     _idColumnName: note.id,
+  //     _titleColumnName: note.title,
+  //     _contentColumnName: note.content,
+  //   };
+  // }
 }

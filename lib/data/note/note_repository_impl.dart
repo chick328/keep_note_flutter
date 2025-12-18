@@ -15,7 +15,7 @@ class NoteRepositoryImpl extends NoteRepository {
         await _database.open();
       }
 
-      await _database.noteDao?.insert(note.title, note.content);
+      await _database.noteDao?.insert(note);
       return Result.success(null);
     } on Exception catch (e) {
       return Result.error(e);
@@ -77,6 +77,24 @@ class NoteRepositoryImpl extends NoteRepository {
 
       var result = await _database.noteDao?.fetchById(id);
       return Result.success(result!.toNote());
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  @override
+  Future<Result<void>> insertOrUpdateNote(Note note) async{
+    try {
+      if (!_database.isOpen()) {
+        await _database.open();
+      }
+
+      if (note.id == null) {
+        await _database.noteDao?.insert(note);
+      }else {
+       await _database.noteDao?.update(note);
+    }
+      return Result.success(null);
     } on Exception catch (e) {
       return Result.error(e);
     }

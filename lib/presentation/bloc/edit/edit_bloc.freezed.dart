@@ -55,13 +55,14 @@ extension EditEventPatterns on EditEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchNoteById value)?  fetchNoteById,TResult Function( _OnTitleChanged value)?  onTitleChanged,TResult Function( _OnContentChanged value)?  onContentChanged,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchNoteById value)?  fetchNoteById,TResult Function( _OnTitleChanged value)?  onTitleChanged,TResult Function( _OnContentChanged value)?  onContentChanged,TResult Function( _SaveNote value)?  saveNote,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that);case _OnContentChanged() when onContentChanged != null:
-return onContentChanged(_that);case _:
+return onContentChanged(_that);case _SaveNote() when saveNote != null:
+return saveNote(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return onContentChanged(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchNoteById value)  fetchNoteById,required TResult Function( _OnTitleChanged value)  onTitleChanged,required TResult Function( _OnContentChanged value)  onContentChanged,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchNoteById value)  fetchNoteById,required TResult Function( _OnTitleChanged value)  onTitleChanged,required TResult Function( _OnContentChanged value)  onContentChanged,required TResult Function( _SaveNote value)  saveNote,}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById():
 return fetchNoteById(_that);case _OnTitleChanged():
 return onTitleChanged(_that);case _OnContentChanged():
-return onContentChanged(_that);}
+return onContentChanged(_that);case _SaveNote():
+return saveNote(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -99,13 +101,14 @@ return onContentChanged(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchNoteById value)?  fetchNoteById,TResult? Function( _OnTitleChanged value)?  onTitleChanged,TResult? Function( _OnContentChanged value)?  onContentChanged,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchNoteById value)?  fetchNoteById,TResult? Function( _OnTitleChanged value)?  onTitleChanged,TResult? Function( _OnContentChanged value)?  onContentChanged,TResult? Function( _SaveNote value)?  saveNote,}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that);case _OnContentChanged() when onContentChanged != null:
-return onContentChanged(_that);case _:
+return onContentChanged(_that);case _SaveNote() when saveNote != null:
+return saveNote(_that);case _:
   return null;
 
 }
@@ -122,12 +125,13 @@ return onContentChanged(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  fetchNoteById,TResult Function( String title)?  onTitleChanged,TResult Function( String content)?  onContentChanged,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  fetchNoteById,TResult Function( String title)?  onTitleChanged,TResult Function( String content)?  onContentChanged,TResult Function()?  saveNote,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that.id);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that.title);case _OnContentChanged() when onContentChanged != null:
-return onContentChanged(_that.content);case _:
+return onContentChanged(_that.content);case _SaveNote() when saveNote != null:
+return saveNote();case _:
   return orElse();
 
 }
@@ -145,12 +149,13 @@ return onContentChanged(_that.content);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  fetchNoteById,required TResult Function( String title)  onTitleChanged,required TResult Function( String content)  onContentChanged,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  fetchNoteById,required TResult Function( String title)  onTitleChanged,required TResult Function( String content)  onContentChanged,required TResult Function()  saveNote,}) {final _that = this;
 switch (_that) {
 case _FetchNoteById():
 return fetchNoteById(_that.id);case _OnTitleChanged():
 return onTitleChanged(_that.title);case _OnContentChanged():
-return onContentChanged(_that.content);}
+return onContentChanged(_that.content);case _SaveNote():
+return saveNote();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -164,12 +169,13 @@ return onContentChanged(_that.content);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  fetchNoteById,TResult? Function( String title)?  onTitleChanged,TResult? Function( String content)?  onContentChanged,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  fetchNoteById,TResult? Function( String title)?  onTitleChanged,TResult? Function( String content)?  onContentChanged,TResult? Function()?  saveNote,}) {final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that.id);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that.title);case _OnContentChanged() when onContentChanged != null:
-return onContentChanged(_that.content);case _:
+return onContentChanged(_that.content);case _SaveNote() when saveNote != null:
+return saveNote();case _:
   return null;
 
 }
@@ -374,6 +380,38 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class _SaveNote implements EditEvent {
+  const _SaveNote();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SaveNote);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'EditEvent.saveNote()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 mixin _$EditPresentationEvent {

@@ -60,7 +60,7 @@ class _ListingLayout extends StatelessWidget {
             backgroundColor: Colors.white,
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                context.push(Routes.noteEdit);
+                _navigateAndRefresh(context, null);
                 // final datetime = DateTime.now();
                 // context.read<NoteBloc>().add(
                 //   NoteEvent.createNote(
@@ -114,7 +114,9 @@ class _ListingLayout extends StatelessWidget {
                           // ),
                           CupertinoSliverRefreshControl(
                             onRefresh: () async {
-                              print("refresh");
+                              context.read<ListingBloc>().add(
+                                ListingEvent.refresh(),
+                              );
                             },
                           ),
                           SliverSafeArea(
@@ -149,9 +151,8 @@ class _ListingLayout extends StatelessWidget {
                                             context,
                                             item,
                                           ),
-                                      onCardClick: () => context.push(
-                                        Routes.noteEditWithId(item.id),
-                                      ),
+                                      onCardClick: () =>
+                                          _navigateAndRefresh(context, item.id),
                                     ),
                               ),
                               // sliver: AppPagingSliverGrid<Note>(
@@ -207,7 +208,7 @@ class _ListingLayout extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Delete Note'),
-          content: const Text('Delete Note'),
+          content: const Text('Are you sure?'),
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
@@ -234,5 +235,21 @@ class _ListingLayout extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _navigateAndRefresh(BuildContext context, int? id) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    if (id != null) {
+      await context.push(Routes.noteEditWithId(id));
+    } else {
+      await context.push(Routes.noteEdit);
+    }
+
+    // When a BuildContext is used from a StatefulWidget, the mounted property
+    // must be checked after an asynchronous gap.
+    if (!context.mounted) return;
+
+    context.read<ListingBloc>().add(ListingEvent.refresh());
   }
 }

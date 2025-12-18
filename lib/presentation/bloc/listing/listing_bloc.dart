@@ -27,7 +27,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
           await getAllNotes(emit);
         },
         refresh: (_) async {
-          await getAllNotes(emit);
+          await refreshNotesPaginated(emit);
         },
         createNote: (event) async {
           final result = await _noteRepository.createNote(

@@ -39,6 +39,7 @@ class _EditLayout extends StatelessWidget {
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
+                  context.read<EditBloc>().add(EditEvent.saveNote());
                   Navigator.of(context).pop();
                 },
               ),
@@ -47,11 +48,12 @@ class _EditLayout extends StatelessWidget {
             body: Column(
               children: [
                 Padding(
-                  padding: EdgeInsetsGeometry.symmetric(
-                    horizontal: 16.0,
-                  ),
+                  padding: EdgeInsetsGeometry.symmetric(horizontal: 16.0),
                   child: TextField(
-                    controller: TextEditingController(text: state.note.title),
+                    controller: TextEditingController(text: state.note.title)
+                      ..selection = TextSelection.collapsed(
+                        offset: state.note.title?.length ?? 0,
+                      ),
                     autofocus: true,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
@@ -60,6 +62,11 @@ class _EditLayout extends StatelessWidget {
                       hintText: "Title",
                       border: InputBorder.none,
                     ),
+                    onChanged: (value) {
+                      context.read<EditBloc>().add(
+                        EditEvent.onTitleChanged(value),
+                      );
+                    },
                   ),
                 ),
                 Expanded(
@@ -69,8 +76,11 @@ class _EditLayout extends StatelessWidget {
                       horizontal: 16.0,
                     ),
                     child: TextField(
-                      controller: TextEditingController(text: state.note.content),
-                      autofocus: true,
+                      controller:
+                          TextEditingController(text: state.note.content)
+                            ..selection = TextSelection.collapsed(
+                              offset: state.note.content?.length ?? 0,
+                            ),
                       maxLines: null,
                       style: Theme.of(context).textTheme.bodyMedium,
                       keyboardType: TextInputType.multiline,
@@ -78,6 +88,11 @@ class _EditLayout extends StatelessWidget {
                         hintText: "Content",
                         border: InputBorder.none,
                       ),
+                      onChanged: (value) {
+                        context.read<EditBloc>().add(
+                          EditEvent.onContentChanged(value),
+                        );
+                      },
                     ),
                   ),
                 ),

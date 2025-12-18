@@ -213,8 +213,8 @@ return $default(_that.id,_that.title,_that.content);case _:
 /// @nodoc
 
 
-class _Note with DiagnosticableTreeMixin implements Note {
-  const _Note({this.id, this.title, this.content});
+class _Note extends Note with DiagnosticableTreeMixin {
+  const _Note({this.id, this.title, this.content}): super._();
   
 
 @override final  int? id;
