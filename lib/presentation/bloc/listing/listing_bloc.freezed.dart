@@ -55,15 +55,17 @@ extension ListingEventPatterns on ListingEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchAllNotes value)?  fetchAllNotes,TResult Function( _FetchNotesPagingNext value)?  fetchNotesPagingNext,TResult Function( _Refresh value)?  refresh,TResult Function( _CreateNote value)?  createNote,TResult Function( _DeleteNote value)?  deleteNote,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _SearchNotes value)?  searchNotes,TResult Function( _OnSearchKeywordChanged value)?  onSearchKeywordChanged,TResult Function( _FetchNotesPagingNext value)?  fetchNotesPagingNext,TResult Function( _Refresh value)?  refresh,TResult Function( _DeleteNote value)?  deleteNote,TResult Function( _OnDisplayModeSelected value)?  onDisplayModeSelected,TResult Function( _GetDisplayMode value)?  getDisplayMode,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _FetchAllNotes() when fetchAllNotes != null:
-return fetchAllNotes(_that);case _FetchNotesPagingNext() when fetchNotesPagingNext != null:
+case _SearchNotes() when searchNotes != null:
+return searchNotes(_that);case _OnSearchKeywordChanged() when onSearchKeywordChanged != null:
+return onSearchKeywordChanged(_that);case _FetchNotesPagingNext() when fetchNotesPagingNext != null:
 return fetchNotesPagingNext(_that);case _Refresh() when refresh != null:
-return refresh(_that);case _CreateNote() when createNote != null:
-return createNote(_that);case _DeleteNote() when deleteNote != null:
-return deleteNote(_that);case _:
+return refresh(_that);case _DeleteNote() when deleteNote != null:
+return deleteNote(_that);case _OnDisplayModeSelected() when onDisplayModeSelected != null:
+return onDisplayModeSelected(_that);case _GetDisplayMode() when getDisplayMode != null:
+return getDisplayMode(_that);case _:
   return orElse();
 
 }
@@ -81,15 +83,17 @@ return deleteNote(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchAllNotes value)  fetchAllNotes,required TResult Function( _FetchNotesPagingNext value)  fetchNotesPagingNext,required TResult Function( _Refresh value)  refresh,required TResult Function( _CreateNote value)  createNote,required TResult Function( _DeleteNote value)  deleteNote,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _SearchNotes value)  searchNotes,required TResult Function( _OnSearchKeywordChanged value)  onSearchKeywordChanged,required TResult Function( _FetchNotesPagingNext value)  fetchNotesPagingNext,required TResult Function( _Refresh value)  refresh,required TResult Function( _DeleteNote value)  deleteNote,required TResult Function( _OnDisplayModeSelected value)  onDisplayModeSelected,required TResult Function( _GetDisplayMode value)  getDisplayMode,}){
 final _that = this;
 switch (_that) {
-case _FetchAllNotes():
-return fetchAllNotes(_that);case _FetchNotesPagingNext():
+case _SearchNotes():
+return searchNotes(_that);case _OnSearchKeywordChanged():
+return onSearchKeywordChanged(_that);case _FetchNotesPagingNext():
 return fetchNotesPagingNext(_that);case _Refresh():
-return refresh(_that);case _CreateNote():
-return createNote(_that);case _DeleteNote():
-return deleteNote(_that);}
+return refresh(_that);case _DeleteNote():
+return deleteNote(_that);case _OnDisplayModeSelected():
+return onDisplayModeSelected(_that);case _GetDisplayMode():
+return getDisplayMode(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,15 +107,17 @@ return deleteNote(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchAllNotes value)?  fetchAllNotes,TResult? Function( _FetchNotesPagingNext value)?  fetchNotesPagingNext,TResult? Function( _Refresh value)?  refresh,TResult? Function( _CreateNote value)?  createNote,TResult? Function( _DeleteNote value)?  deleteNote,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _SearchNotes value)?  searchNotes,TResult? Function( _OnSearchKeywordChanged value)?  onSearchKeywordChanged,TResult? Function( _FetchNotesPagingNext value)?  fetchNotesPagingNext,TResult? Function( _Refresh value)?  refresh,TResult? Function( _DeleteNote value)?  deleteNote,TResult? Function( _OnDisplayModeSelected value)?  onDisplayModeSelected,TResult? Function( _GetDisplayMode value)?  getDisplayMode,}){
 final _that = this;
 switch (_that) {
-case _FetchAllNotes() when fetchAllNotes != null:
-return fetchAllNotes(_that);case _FetchNotesPagingNext() when fetchNotesPagingNext != null:
+case _SearchNotes() when searchNotes != null:
+return searchNotes(_that);case _OnSearchKeywordChanged() when onSearchKeywordChanged != null:
+return onSearchKeywordChanged(_that);case _FetchNotesPagingNext() when fetchNotesPagingNext != null:
 return fetchNotesPagingNext(_that);case _Refresh() when refresh != null:
-return refresh(_that);case _CreateNote() when createNote != null:
-return createNote(_that);case _DeleteNote() when deleteNote != null:
-return deleteNote(_that);case _:
+return refresh(_that);case _DeleteNote() when deleteNote != null:
+return deleteNote(_that);case _OnDisplayModeSelected() when onDisplayModeSelected != null:
+return onDisplayModeSelected(_that);case _GetDisplayMode() when getDisplayMode != null:
+return getDisplayMode(_that);case _:
   return null;
 
 }
@@ -128,14 +134,16 @@ return deleteNote(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetchAllNotes,TResult Function()?  fetchNotesPagingNext,TResult Function()?  refresh,TResult Function( String title,  String content)?  createNote,TResult Function( Note note)?  deleteNote,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String keyword)?  searchNotes,TResult Function( String keyword)?  onSearchKeywordChanged,TResult Function()?  fetchNotesPagingNext,TResult Function()?  refresh,TResult Function( Note note)?  deleteNote,TResult Function( DisplayMode mode)?  onDisplayModeSelected,TResult Function()?  getDisplayMode,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _FetchAllNotes() when fetchAllNotes != null:
-return fetchAllNotes();case _FetchNotesPagingNext() when fetchNotesPagingNext != null:
+case _SearchNotes() when searchNotes != null:
+return searchNotes(_that.keyword);case _OnSearchKeywordChanged() when onSearchKeywordChanged != null:
+return onSearchKeywordChanged(_that.keyword);case _FetchNotesPagingNext() when fetchNotesPagingNext != null:
 return fetchNotesPagingNext();case _Refresh() when refresh != null:
-return refresh();case _CreateNote() when createNote != null:
-return createNote(_that.title,_that.content);case _DeleteNote() when deleteNote != null:
-return deleteNote(_that.note);case _:
+return refresh();case _DeleteNote() when deleteNote != null:
+return deleteNote(_that.note);case _OnDisplayModeSelected() when onDisplayModeSelected != null:
+return onDisplayModeSelected(_that.mode);case _GetDisplayMode() when getDisplayMode != null:
+return getDisplayMode();case _:
   return orElse();
 
 }
@@ -153,14 +161,16 @@ return deleteNote(_that.note);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetchAllNotes,required TResult Function()  fetchNotesPagingNext,required TResult Function()  refresh,required TResult Function( String title,  String content)  createNote,required TResult Function( Note note)  deleteNote,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String keyword)  searchNotes,required TResult Function( String keyword)  onSearchKeywordChanged,required TResult Function()  fetchNotesPagingNext,required TResult Function()  refresh,required TResult Function( Note note)  deleteNote,required TResult Function( DisplayMode mode)  onDisplayModeSelected,required TResult Function()  getDisplayMode,}) {final _that = this;
 switch (_that) {
-case _FetchAllNotes():
-return fetchAllNotes();case _FetchNotesPagingNext():
+case _SearchNotes():
+return searchNotes(_that.keyword);case _OnSearchKeywordChanged():
+return onSearchKeywordChanged(_that.keyword);case _FetchNotesPagingNext():
 return fetchNotesPagingNext();case _Refresh():
-return refresh();case _CreateNote():
-return createNote(_that.title,_that.content);case _DeleteNote():
-return deleteNote(_that.note);}
+return refresh();case _DeleteNote():
+return deleteNote(_that.note);case _OnDisplayModeSelected():
+return onDisplayModeSelected(_that.mode);case _GetDisplayMode():
+return getDisplayMode();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,14 +184,16 @@ return deleteNote(_that.note);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetchAllNotes,TResult? Function()?  fetchNotesPagingNext,TResult? Function()?  refresh,TResult? Function( String title,  String content)?  createNote,TResult? Function( Note note)?  deleteNote,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String keyword)?  searchNotes,TResult? Function( String keyword)?  onSearchKeywordChanged,TResult? Function()?  fetchNotesPagingNext,TResult? Function()?  refresh,TResult? Function( Note note)?  deleteNote,TResult? Function( DisplayMode mode)?  onDisplayModeSelected,TResult? Function()?  getDisplayMode,}) {final _that = this;
 switch (_that) {
-case _FetchAllNotes() when fetchAllNotes != null:
-return fetchAllNotes();case _FetchNotesPagingNext() when fetchNotesPagingNext != null:
+case _SearchNotes() when searchNotes != null:
+return searchNotes(_that.keyword);case _OnSearchKeywordChanged() when onSearchKeywordChanged != null:
+return onSearchKeywordChanged(_that.keyword);case _FetchNotesPagingNext() when fetchNotesPagingNext != null:
 return fetchNotesPagingNext();case _Refresh() when refresh != null:
-return refresh();case _CreateNote() when createNote != null:
-return createNote(_that.title,_that.content);case _DeleteNote() when deleteNote != null:
-return deleteNote(_that.note);case _:
+return refresh();case _DeleteNote() when deleteNote != null:
+return deleteNote(_that.note);case _OnDisplayModeSelected() when onDisplayModeSelected != null:
+return onDisplayModeSelected(_that.mode);case _GetDisplayMode() when getDisplayMode != null:
+return getDisplayMode();case _:
   return null;
 
 }
@@ -192,34 +204,134 @@ return deleteNote(_that.note);case _:
 /// @nodoc
 
 
-class _FetchAllNotes implements ListingEvent {
-  const _FetchAllNotes();
+class _SearchNotes implements ListingEvent {
+  const _SearchNotes(this.keyword);
   
 
+ final  String keyword;
 
-
+/// Create a copy of ListingEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SearchNotesCopyWith<_SearchNotes> get copyWith => __$SearchNotesCopyWithImpl<_SearchNotes>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchAllNotes);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchNotes&&(identical(other.keyword, keyword) || other.keyword == keyword));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,keyword);
 
 @override
 String toString() {
-  return 'ListingEvent.fetchAllNotes()';
+  return 'ListingEvent.searchNotes(keyword: $keyword)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$SearchNotesCopyWith<$Res> implements $ListingEventCopyWith<$Res> {
+  factory _$SearchNotesCopyWith(_SearchNotes value, $Res Function(_SearchNotes) _then) = __$SearchNotesCopyWithImpl;
+@useResult
+$Res call({
+ String keyword
+});
 
 
+
+
+}
+/// @nodoc
+class __$SearchNotesCopyWithImpl<$Res>
+    implements _$SearchNotesCopyWith<$Res> {
+  __$SearchNotesCopyWithImpl(this._self, this._then);
+
+  final _SearchNotes _self;
+  final $Res Function(_SearchNotes) _then;
+
+/// Create a copy of ListingEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? keyword = null,}) {
+  return _then(_SearchNotes(
+null == keyword ? _self.keyword : keyword // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _OnSearchKeywordChanged implements ListingEvent {
+  const _OnSearchKeywordChanged(this.keyword);
+  
+
+ final  String keyword;
+
+/// Create a copy of ListingEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$OnSearchKeywordChangedCopyWith<_OnSearchKeywordChanged> get copyWith => __$OnSearchKeywordChangedCopyWithImpl<_OnSearchKeywordChanged>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnSearchKeywordChanged&&(identical(other.keyword, keyword) || other.keyword == keyword));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,keyword);
+
+@override
+String toString() {
+  return 'ListingEvent.onSearchKeywordChanged(keyword: $keyword)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$OnSearchKeywordChangedCopyWith<$Res> implements $ListingEventCopyWith<$Res> {
+  factory _$OnSearchKeywordChangedCopyWith(_OnSearchKeywordChanged value, $Res Function(_OnSearchKeywordChanged) _then) = __$OnSearchKeywordChangedCopyWithImpl;
+@useResult
+$Res call({
+ String keyword
+});
+
+
+
+
+}
+/// @nodoc
+class __$OnSearchKeywordChangedCopyWithImpl<$Res>
+    implements _$OnSearchKeywordChangedCopyWith<$Res> {
+  __$OnSearchKeywordChangedCopyWithImpl(this._self, this._then);
+
+  final _OnSearchKeywordChanged _self;
+  final $Res Function(_OnSearchKeywordChanged) _then;
+
+/// Create a copy of ListingEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? keyword = null,}) {
+  return _then(_OnSearchKeywordChanged(
+null == keyword ? _self.keyword : keyword // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
@@ -284,74 +396,6 @@ String toString() {
 
 
 
-
-/// @nodoc
-
-
-class _CreateNote implements ListingEvent {
-  const _CreateNote(this.title, this.content);
-  
-
- final  String title;
- final  String content;
-
-/// Create a copy of ListingEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$CreateNoteCopyWith<_CreateNote> get copyWith => __$CreateNoteCopyWithImpl<_CreateNote>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateNote&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,title,content);
-
-@override
-String toString() {
-  return 'ListingEvent.createNote(title: $title, content: $content)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$CreateNoteCopyWith<$Res> implements $ListingEventCopyWith<$Res> {
-  factory _$CreateNoteCopyWith(_CreateNote value, $Res Function(_CreateNote) _then) = __$CreateNoteCopyWithImpl;
-@useResult
-$Res call({
- String title, String content
-});
-
-
-
-
-}
-/// @nodoc
-class __$CreateNoteCopyWithImpl<$Res>
-    implements _$CreateNoteCopyWith<$Res> {
-  __$CreateNoteCopyWithImpl(this._self, this._then);
-
-  final _CreateNote _self;
-  final $Res Function(_CreateNote) _then;
-
-/// Create a copy of ListingEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? title = null,Object? content = null,}) {
-  return _then(_CreateNote(
-null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
-
-}
 
 /// @nodoc
 
@@ -429,6 +473,104 @@ $NoteCopyWith<$Res> get note {
 }
 
 /// @nodoc
+
+
+class _OnDisplayModeSelected implements ListingEvent {
+  const _OnDisplayModeSelected(this.mode);
+  
+
+ final  DisplayMode mode;
+
+/// Create a copy of ListingEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$OnDisplayModeSelectedCopyWith<_OnDisplayModeSelected> get copyWith => __$OnDisplayModeSelectedCopyWithImpl<_OnDisplayModeSelected>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnDisplayModeSelected&&(identical(other.mode, mode) || other.mode == mode));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,mode);
+
+@override
+String toString() {
+  return 'ListingEvent.onDisplayModeSelected(mode: $mode)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$OnDisplayModeSelectedCopyWith<$Res> implements $ListingEventCopyWith<$Res> {
+  factory _$OnDisplayModeSelectedCopyWith(_OnDisplayModeSelected value, $Res Function(_OnDisplayModeSelected) _then) = __$OnDisplayModeSelectedCopyWithImpl;
+@useResult
+$Res call({
+ DisplayMode mode
+});
+
+
+
+
+}
+/// @nodoc
+class __$OnDisplayModeSelectedCopyWithImpl<$Res>
+    implements _$OnDisplayModeSelectedCopyWith<$Res> {
+  __$OnDisplayModeSelectedCopyWithImpl(this._self, this._then);
+
+  final _OnDisplayModeSelected _self;
+  final $Res Function(_OnDisplayModeSelected) _then;
+
+/// Create a copy of ListingEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? mode = null,}) {
+  return _then(_OnDisplayModeSelected(
+null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
+as DisplayMode,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _GetDisplayMode implements ListingEvent {
+  const _GetDisplayMode();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetDisplayMode);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ListingEvent.getDisplayMode()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$ListingPresentationEvent {
 
 
@@ -472,12 +614,10 @@ extension ListingPresentationEventPatterns on ListingPresentationEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( CreateNoteSuccess value)?  createNoteSuccess,TResult Function( CreateNoteFailure value)?  createNoteFailure,TResult Function( DeleteNoteSuccess value)?  deleteNoteSuccess,TResult Function( DeleteNoteFailure value)?  deleteNoteFailure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DeleteNoteSuccess value)?  deleteNoteSuccess,TResult Function( DeleteNoteFailure value)?  deleteNoteFailure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case CreateNoteSuccess() when createNoteSuccess != null:
-return createNoteSuccess(_that);case CreateNoteFailure() when createNoteFailure != null:
-return createNoteFailure(_that);case DeleteNoteSuccess() when deleteNoteSuccess != null:
+case DeleteNoteSuccess() when deleteNoteSuccess != null:
 return deleteNoteSuccess(_that);case DeleteNoteFailure() when deleteNoteFailure != null:
 return deleteNoteFailure(_that);case _:
   return orElse();
@@ -497,12 +637,10 @@ return deleteNoteFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( CreateNoteSuccess value)  createNoteSuccess,required TResult Function( CreateNoteFailure value)  createNoteFailure,required TResult Function( DeleteNoteSuccess value)  deleteNoteSuccess,required TResult Function( DeleteNoteFailure value)  deleteNoteFailure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DeleteNoteSuccess value)  deleteNoteSuccess,required TResult Function( DeleteNoteFailure value)  deleteNoteFailure,}){
 final _that = this;
 switch (_that) {
-case CreateNoteSuccess():
-return createNoteSuccess(_that);case CreateNoteFailure():
-return createNoteFailure(_that);case DeleteNoteSuccess():
+case DeleteNoteSuccess():
 return deleteNoteSuccess(_that);case DeleteNoteFailure():
 return deleteNoteFailure(_that);}
 }
@@ -518,12 +656,10 @@ return deleteNoteFailure(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( CreateNoteSuccess value)?  createNoteSuccess,TResult? Function( CreateNoteFailure value)?  createNoteFailure,TResult? Function( DeleteNoteSuccess value)?  deleteNoteSuccess,TResult? Function( DeleteNoteFailure value)?  deleteNoteFailure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DeleteNoteSuccess value)?  deleteNoteSuccess,TResult? Function( DeleteNoteFailure value)?  deleteNoteFailure,}){
 final _that = this;
 switch (_that) {
-case CreateNoteSuccess() when createNoteSuccess != null:
-return createNoteSuccess(_that);case CreateNoteFailure() when createNoteFailure != null:
-return createNoteFailure(_that);case DeleteNoteSuccess() when deleteNoteSuccess != null:
+case DeleteNoteSuccess() when deleteNoteSuccess != null:
 return deleteNoteSuccess(_that);case DeleteNoteFailure() when deleteNoteFailure != null:
 return deleteNoteFailure(_that);case _:
   return null;
@@ -542,11 +678,9 @@ return deleteNoteFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  createNoteSuccess,TResult Function()?  createNoteFailure,TResult Function()?  deleteNoteSuccess,TResult Function()?  deleteNoteFailure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  deleteNoteSuccess,TResult Function()?  deleteNoteFailure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case CreateNoteSuccess() when createNoteSuccess != null:
-return createNoteSuccess();case CreateNoteFailure() when createNoteFailure != null:
-return createNoteFailure();case DeleteNoteSuccess() when deleteNoteSuccess != null:
+case DeleteNoteSuccess() when deleteNoteSuccess != null:
 return deleteNoteSuccess();case DeleteNoteFailure() when deleteNoteFailure != null:
 return deleteNoteFailure();case _:
   return orElse();
@@ -566,11 +700,9 @@ return deleteNoteFailure();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  createNoteSuccess,required TResult Function()  createNoteFailure,required TResult Function()  deleteNoteSuccess,required TResult Function()  deleteNoteFailure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  deleteNoteSuccess,required TResult Function()  deleteNoteFailure,}) {final _that = this;
 switch (_that) {
-case CreateNoteSuccess():
-return createNoteSuccess();case CreateNoteFailure():
-return createNoteFailure();case DeleteNoteSuccess():
+case DeleteNoteSuccess():
 return deleteNoteSuccess();case DeleteNoteFailure():
 return deleteNoteFailure();}
 }
@@ -586,11 +718,9 @@ return deleteNoteFailure();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  createNoteSuccess,TResult? Function()?  createNoteFailure,TResult? Function()?  deleteNoteSuccess,TResult? Function()?  deleteNoteFailure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  deleteNoteSuccess,TResult? Function()?  deleteNoteFailure,}) {final _that = this;
 switch (_that) {
-case CreateNoteSuccess() when createNoteSuccess != null:
-return createNoteSuccess();case CreateNoteFailure() when createNoteFailure != null:
-return createNoteFailure();case DeleteNoteSuccess() when deleteNoteSuccess != null:
+case DeleteNoteSuccess() when deleteNoteSuccess != null:
 return deleteNoteSuccess();case DeleteNoteFailure() when deleteNoteFailure != null:
 return deleteNoteFailure();case _:
   return null;
@@ -599,70 +729,6 @@ return deleteNoteFailure();case _:
 }
 
 }
-
-/// @nodoc
-
-
-class CreateNoteSuccess implements ListingPresentationEvent {
-  const CreateNoteSuccess();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateNoteSuccess);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'ListingPresentationEvent.createNoteSuccess()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class CreateNoteFailure implements ListingPresentationEvent {
-  const CreateNoteFailure();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateNoteFailure);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'ListingPresentationEvent.createNoteFailure()';
-}
-
-
-}
-
-
-
 
 /// @nodoc
 
@@ -731,7 +797,7 @@ String toString() {
 /// @nodoc
 mixin _$ListingState {
 
- List<Note> get notes; AppPagingState<Note>? get notePagingState; set notePagingState(AppPagingState<Note>? value); bool get isGetAllNotesFailure; bool get isCreateNoteSuccess; bool get isCreateNoteFailure; bool get isDeleteNoteSuccess; bool get isDeleteNoteFailure;
+ List<Note> get searchResult; String get searchKeyword; DisplayMode get displayMode; AppPagingState<Note>? get notePagingState; set notePagingState(AppPagingState<Note>? value); bool get isSearchFailure; bool get isDeleteNoteSuccess; bool get isDeleteNoteFailure;
 /// Create a copy of ListingState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -742,16 +808,16 @@ $ListingStateCopyWith<ListingState> get copyWith => _$ListingStateCopyWithImpl<L
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListingState&&const DeepCollectionEquality().equals(other.notes, notes)&&(identical(other.notePagingState, notePagingState) || other.notePagingState == notePagingState)&&(identical(other.isGetAllNotesFailure, isGetAllNotesFailure) || other.isGetAllNotesFailure == isGetAllNotesFailure)&&(identical(other.isCreateNoteSuccess, isCreateNoteSuccess) || other.isCreateNoteSuccess == isCreateNoteSuccess)&&(identical(other.isCreateNoteFailure, isCreateNoteFailure) || other.isCreateNoteFailure == isCreateNoteFailure)&&(identical(other.isDeleteNoteSuccess, isDeleteNoteSuccess) || other.isDeleteNoteSuccess == isDeleteNoteSuccess)&&(identical(other.isDeleteNoteFailure, isDeleteNoteFailure) || other.isDeleteNoteFailure == isDeleteNoteFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListingState&&const DeepCollectionEquality().equals(other.searchResult, searchResult)&&(identical(other.searchKeyword, searchKeyword) || other.searchKeyword == searchKeyword)&&(identical(other.displayMode, displayMode) || other.displayMode == displayMode)&&(identical(other.notePagingState, notePagingState) || other.notePagingState == notePagingState)&&(identical(other.isSearchFailure, isSearchFailure) || other.isSearchFailure == isSearchFailure)&&(identical(other.isDeleteNoteSuccess, isDeleteNoteSuccess) || other.isDeleteNoteSuccess == isDeleteNoteSuccess)&&(identical(other.isDeleteNoteFailure, isDeleteNoteFailure) || other.isDeleteNoteFailure == isDeleteNoteFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(notes),notePagingState,isGetAllNotesFailure,isCreateNoteSuccess,isCreateNoteFailure,isDeleteNoteSuccess,isDeleteNoteFailure);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(searchResult),searchKeyword,displayMode,notePagingState,isSearchFailure,isDeleteNoteSuccess,isDeleteNoteFailure);
 
 @override
 String toString() {
-  return 'ListingState(notes: $notes, notePagingState: $notePagingState, isGetAllNotesFailure: $isGetAllNotesFailure, isCreateNoteSuccess: $isCreateNoteSuccess, isCreateNoteFailure: $isCreateNoteFailure, isDeleteNoteSuccess: $isDeleteNoteSuccess, isDeleteNoteFailure: $isDeleteNoteFailure)';
+  return 'ListingState(searchResult: $searchResult, searchKeyword: $searchKeyword, displayMode: $displayMode, notePagingState: $notePagingState, isSearchFailure: $isSearchFailure, isDeleteNoteSuccess: $isDeleteNoteSuccess, isDeleteNoteFailure: $isDeleteNoteFailure)';
 }
 
 
@@ -762,7 +828,7 @@ abstract mixin class $ListingStateCopyWith<$Res>  {
   factory $ListingStateCopyWith(ListingState value, $Res Function(ListingState) _then) = _$ListingStateCopyWithImpl;
 @useResult
 $Res call({
- List<Note> notes, bool isGetAllNotesFailure, bool isCreateNoteSuccess, bool isCreateNoteFailure, bool isDeleteNoteSuccess, bool isDeleteNoteFailure, dynamic notePagingState
+ List<Note> searchResult, String searchKeyword, DisplayMode displayMode, bool isSearchFailure, bool isDeleteNoteSuccess, bool isDeleteNoteFailure, dynamic notePagingState
 });
 
 
@@ -779,12 +845,12 @@ class _$ListingStateCopyWithImpl<$Res>
 
 /// Create a copy of ListingState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? notes = null,Object? isGetAllNotesFailure = null,Object? isCreateNoteSuccess = null,Object? isCreateNoteFailure = null,Object? isDeleteNoteSuccess = null,Object? isDeleteNoteFailure = null,Object? notePagingState = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? searchResult = null,Object? searchKeyword = null,Object? displayMode = null,Object? isSearchFailure = null,Object? isDeleteNoteSuccess = null,Object? isDeleteNoteFailure = null,Object? notePagingState = freezed,}) {
   return _then(ListingState(
-notes: null == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
-as List<Note>,isGetAllNotesFailure: null == isGetAllNotesFailure ? _self.isGetAllNotesFailure : isGetAllNotesFailure // ignore: cast_nullable_to_non_nullable
-as bool,isCreateNoteSuccess: null == isCreateNoteSuccess ? _self.isCreateNoteSuccess : isCreateNoteSuccess // ignore: cast_nullable_to_non_nullable
-as bool,isCreateNoteFailure: null == isCreateNoteFailure ? _self.isCreateNoteFailure : isCreateNoteFailure // ignore: cast_nullable_to_non_nullable
+searchResult: null == searchResult ? _self.searchResult : searchResult // ignore: cast_nullable_to_non_nullable
+as List<Note>,searchKeyword: null == searchKeyword ? _self.searchKeyword : searchKeyword // ignore: cast_nullable_to_non_nullable
+as String,displayMode: null == displayMode ? _self.displayMode : displayMode // ignore: cast_nullable_to_non_nullable
+as DisplayMode,isSearchFailure: null == isSearchFailure ? _self.isSearchFailure : isSearchFailure // ignore: cast_nullable_to_non_nullable
 as bool,isDeleteNoteSuccess: null == isDeleteNoteSuccess ? _self.isDeleteNoteSuccess : isDeleteNoteSuccess // ignore: cast_nullable_to_non_nullable
 as bool,isDeleteNoteFailure: null == isDeleteNoteFailure ? _self.isDeleteNoteFailure : isDeleteNoteFailure // ignore: cast_nullable_to_non_nullable
 as bool,notePagingState: freezed == notePagingState ? _self.notePagingState! : notePagingState // ignore: cast_nullable_to_non_nullable

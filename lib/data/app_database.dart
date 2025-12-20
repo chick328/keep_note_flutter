@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../note/note_dao.dart';
+import 'note/note_dao.dart';
 
 class AppDatabase {
   AppDatabase({required this.databaseFactory});

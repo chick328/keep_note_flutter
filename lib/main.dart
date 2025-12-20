@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:keep_note/presentation/ui/common/theme/app_typography.dart';
-import 'config/di/app_module.dart';
 import 'config/di/bloc_module.dart';
 import 'config/di/data_module.dart';
 import 'routing/router.dart';
 
 void main() {
   // init di
-  configureAppModuleDependencies();
   configureDataModuleDependencies();
   configureBlocModuleDependencies();
 

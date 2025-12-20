@@ -4,8 +4,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:keep_note/domain/note/model/note.dart';
 import 'package:keep_note/domain/note/note_repository.dart';
+import 'package:keep_note/domain/shared_pref_manager.dart';
 import 'package:keep_note/domain/util/result.dart';
 
+import '../../../domain/note/model/display_mode.dart';
 import '../../ui/common/paging/app_paging_state.dart';
 
 part 'listing_event.dart';
@@ -18,28 +20,36 @@ part 'listing_bloc.freezed.dart';
 
 class ListingBloc extends Bloc<ListingEvent, ListingState>
     with BlocPresentationMixin<ListingState, ListingPresentationEvent> {
-  ListingBloc({required NoteRepository noteRepository})
-    : _noteRepository = noteRepository,
-      super(ListingState()) {
+  ListingBloc({
+    required NoteRepository noteRepository,
+    required SharedPrefManager sharedPrefManager,
+  }) : _noteRepository = noteRepository,
+       _sharedPrefManager = sharedPrefManager,
+       super(ListingState()) {
     on<ListingEvent>((event, emit) async {
       await event.map(
-        fetchAllNotes: (_) async {
-          await getAllNotes(emit);
+        searchNotes: (event) async {
+          final result = await _noteRepository.getAllNotes(event.keyword);
+          print("$result");
+          switch (result) {
+            case Success<List<Note>>():
+              emit(
+                state.copyWith(
+                  searchResult: result.value,
+                  isSearchFailure: false,
+                ),
+              );
+            case Error():
+              emit(
+                state.copyWith(
+                  searchResult: List.empty(),
+                  isSearchFailure: true,
+                ),
+              );
+          }
         },
         refresh: (_) async {
           await refreshNotesPaginated(emit);
-        },
-        createNote: (event) async {
-          final result = await _noteRepository.createNote(
-            Note(title: event.title, content: event.content),
-          );
-          switch (result) {
-            case Success<void>():
-              emitPresentation(ListingPresentationEvent.createNoteSuccess());
-            await refreshNotesPaginated(emit);
-            case Error():
-              emitPresentation(ListingPresentationEvent.createNoteFailure());
-          }
         },
         deleteNote: (event) async {
           final result = await _noteRepository.deleteNote(event.note);
@@ -53,36 +63,27 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
         },
         fetchNotesPagingNext: (event) async {
           await fetchNotesPaginated(emit);
-          // final result = await _noteRepository.getNotesPaginated(
-          //   20,
-          //   event.page,
-          // );
-          // switch (result) {
-          //   case Success<List<Note>>():
-          //     emit(
-          //       state.copyWith(
-          //         notes: [...state.notes, ...result.value],
-          //         isGetAllNotesFailure: false,
-          //       ),
-          //     );
-          //   case Error():
-          // }
+        },
+        onSearchKeywordChanged: (event) {
+          emit(state.copyWith(searchKeyword: event.keyword));
+        },
+        onDisplayModeSelected: (event) {
+          if (event.mode == state.displayMode) return;
+          sharedPrefManager.setListingDisplayMode(event.mode);
+          emit(state.copyWith(displayMode: event.mode));
+        },
+        getDisplayMode: (event) async{
+          final result = await sharedPrefManager.getListingDisplayMode();
+          if (result != null){
+            emit(state.copyWith(displayMode: result));
+          }
         },
       );
     });
   }
 
   final NoteRepository _noteRepository;
-
-  Future<void> getAllNotes(Emitter<ListingState> emit) async {
-    final result = await _noteRepository.getAllNotes();
-    switch (result) {
-      case Success<List<Note>>():
-        emit(state.copyWith(notes: result.value, isGetAllNotesFailure: false));
-      case Error():
-        emit(state.copyWith(notes: List.empty(), isGetAllNotesFailure: true));
-    }
-  }
+  final SharedPrefManager _sharedPrefManager;
 
   Future<void> fetchNotesPaginated(Emitter<ListingState> emit) async {
     final currentPagingState = state.notePagingState;

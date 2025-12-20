@@ -3,29 +3,29 @@ part of 'listing_bloc.dart';
 @freezed
 class ListingState with _$ListingState {
   ListingState({
-    this.notes = const [],
-    this.isGetAllNotesFailure = false,
-    this.isCreateNoteSuccess = false,
-    this.isCreateNoteFailure = false,
+    this.searchResult = const [],
+    this.searchKeyword = "",
+    this.displayMode = DisplayMode.MasonryGrid,
+    this.isSearchFailure = false,
     this.isDeleteNoteSuccess = false,
     this.isDeleteNoteFailure = false,
     notePagingState,
   }) : notePagingState = (notePagingState ?? AppPagingState<Note>().copyWith());
 
   @override
-  final List<Note> notes;
+  final List<Note> searchResult;
+
+  @override
+  final String searchKeyword;
+
+  @override
+  final DisplayMode displayMode;
 
   @override
   AppPagingState<Note>? notePagingState;
 
   @override
-  final bool isGetAllNotesFailure;
-
-  @override
-  final bool isCreateNoteSuccess;
-
-  @override
-  final bool isCreateNoteFailure;
+  final bool isSearchFailure;
 
   @override
   final bool isDeleteNoteSuccess;

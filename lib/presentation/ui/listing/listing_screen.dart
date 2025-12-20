@@ -1,10 +1,15 @@
+import 'dart:ui';
+
 import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:keep_note/domain/note/model/display_mode.dart';
 import 'package:keep_note/presentation/bloc/listing/listing_bloc.dart';
+import 'package:keep_note/presentation/ui/common/app_sliver_persistent_header.dart';
 import 'package:keep_note/presentation/ui/listing/widget/listing_preview_card.dart';
 import 'package:keep_note/routing/routes.dart';
 
@@ -18,9 +23,9 @@ class ListingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          GetIt.instance<ListingBloc>()
-            ..add(ListingEvent.fetchNotesPagingNext()),
+      create: (_) => GetIt.instance<ListingBloc>()
+        ..add(ListingEvent.fetchNotesPagingNext())
+        ..add(ListingEvent.getDisplayMode()),
       child: _ListingLayout(),
     );
   }
@@ -36,14 +41,6 @@ class _ListingLayout extends StatelessWidget {
     return BlocPresentationListener<ListingBloc, ListingPresentationEvent>(
       listener: (context, event) {
         switch (event) {
-          case CreateNoteSuccess():
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text('Create Success')));
-          case CreateNoteFailure():
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text('Create Failure')));
           case DeleteNoteSuccess():
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
@@ -61,13 +58,6 @@ class _ListingLayout extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 _navigateAndRefresh(context, null);
-                // final datetime = DateTime.now();
-                // context.read<NoteBloc>().add(
-                //   NoteEvent.createNote(
-                //     "title ${datetime}",
-                //     "content ${datetime}",
-                //   ),
-                // );
               },
               tooltip: 'Create New Note',
               child: const Icon(Icons.add),
@@ -78,40 +68,133 @@ class _ListingLayout extends StatelessWidget {
                 child: state.notePagingState != null
                     ? CustomScrollView(
                         slivers: [
-                          // SliverToBoxAdapter(
-                          //   child: TextButton(
-                          //     onPressed: () async {
-                          //       print("------------click------------");
-                          //     },
-                          //     child: Text("click"),
-                          //   ),
-                          // ),
-                          // SliverAppBar(
-                          //   floating: true,     // Snaps into view when scrolling up
-                          //   pinned: true,       // Keeps it visible when scrolled down
-                          //   snap: true,         // Optional: quick snap effect (requires floating: true)
-                          //   elevation: 4,
-                          //   backgroundColor: Theme.of(context).colorScheme.surface,
-                          //   title: TextField(
-                          //     // controller: _searchController,
-                          //     decoration: InputDecoration(
-                          //       hintText: 'Search...',
-                          //       prefixIcon: const Icon(Icons.search),
-                          //       suffixIcon: IconButton(
-                          //         icon: const Icon(Icons.clear),
-                          //         onPressed: () => {},
-                          //       ),
-                          //       filled: true,
-                          //       fillColor: Colors.white,
-                          //       border: OutlineInputBorder(
-                          //         borderRadius: BorderRadius.circular(8),
-                          //       ),
-                          //     ),
-                          //     onChanged: (value) {
-                          //       // Handle search logic here (e.g., filter a list)
-                          //     },
-                          //   ),
-                          // ),
+                          SliverPersistentHeader(
+                            pinned: true,
+                            delegate: AppSliverPersistentHeader(
+                              height: 72.0,
+                              widget: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: SearchAnchor(
+                                        textInputAction: TextInputAction.search,
+                                        viewOnSubmitted: (v) {
+                                          if (v.trim().isEmpty) return;
+                                          context.read<ListingBloc>().add(
+                                            ListingEvent.searchNotes(v),
+                                          );
+                                        },
+                                        builder:
+                                            (
+                                              BuildContext context,
+                                              SearchController controller,
+                                            ) {
+                                              return InkWell(
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(
+                                                    16.0,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .surfaceContainerHigh,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          40,
+                                                        ),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons.search),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsetsGeometry.symmetric(
+                                                              horizontal: 8.0,
+                                                            ),
+                                                        child: Text("Search"),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                        suggestionsBuilder:
+                                            (
+                                              BuildContext context,
+                                              SearchController controller,
+                                            ) {
+                                              return [];
+                                            },
+                                      ),
+                                    ),
+                                    PopupMenuButton<DisplayMode>(
+                                      initialValue: state.displayMode,
+                                      onSelected: (DisplayMode mode) {
+                                        context.read<ListingBloc>().add(
+                                          ListingEvent.onDisplayModeSelected(
+                                            mode,
+                                          ),
+                                        );
+                                      },
+                                      icon: switch (state.displayMode) {
+                                        DisplayMode.MasonryGrid => Icon(
+                                          Icons.grid_view,
+                                        ),
+                                        DisplayMode.List => Icon(
+                                          Icons.view_agenda_outlined,
+                                        ),
+                                      },
+                                      itemBuilder: (BuildContext context) {
+                                        return DisplayMode.values.map((mode) {
+                                          return switch (mode) {
+                                            DisplayMode.MasonryGrid =>
+                                              PopupMenuItem<DisplayMode>(
+                                                value: DisplayMode.MasonryGrid,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(Icons.grid_view),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsGeometry.symmetric(
+                                                            horizontal: 4.0,
+                                                          ),
+                                                      child: Text('Grid'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            DisplayMode.List =>
+                                              PopupMenuItem<DisplayMode>(
+                                                value: DisplayMode.List,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .view_agenda_outlined,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsGeometry.symmetric(
+                                                            horizontal: 4.0,
+                                                          ),
+                                                      child: Text('List'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                          };
+                                        }).toList();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                           CupertinoSliverRefreshControl(
                             onRefresh: () async {
                               context.read<ListingBloc>().add(
@@ -126,71 +209,86 @@ class _ListingLayout extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                               ),
-                              sliver: AppPagingSliverMasonryGrid<Note>(
-                                state: state.notePagingState!,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 10,
-                                maxCrossAxisExtent: windowWidth / 2,
-                                onFetchNextPage: () {
-                                  context.read<ListingBloc>().add(
-                                    ListingEvent.fetchNotesPagingNext(),
-                                  );
-                                },
-                                onRetry: () {
-                                  context.read<ListingBloc>().add(
-                                    ListingEvent.fetchNotesPagingNext(),
-                                  );
-                                },
-                                itemContent: (context, item, index) =>
-                                    ListingPreviewCard(
-                                      key: ValueKey(item.id),
-                                      title: item.title,
-                                      content: item.content,
-                                      onCardLongPress: () =>
-                                          _deleteNoteDialogBuilder(
-                                            context,
-                                            item,
-                                          ),
-                                      onCardClick: () =>
-                                          _navigateAndRefresh(context, item.id),
-                                    ),
-                              ),
-                              // sliver: AppPagingSliverGrid<Note>(
-                              //   state: state.notePagingState!,
-                              //   gridDelegate:
-                              //       SliverGridDelegateWithMaxCrossAxisExtent(
-                              //         maxCrossAxisExtent: windowWidth / 2,
-                              //         mainAxisSpacing: 10.0,
-                              //         crossAxisSpacing: 10.0,
-                              //         childAspectRatio: 1.0,
-                              //       ),
-                              //   onFetchNextPage: () {
-                              //     context.read<NoteBloc>().add(
-                              //       NoteEvent.fetchNotesPagingNext(),
-                              //     );
-                              //   },
-                              //   onRetry: () {
-                              //     context.read<NoteBloc>().add(
-                              //       NoteEvent.fetchNotesPagingNext(),
-                              //     );
-                              //   },
-                              //   itemContent: (context, item, index) =>
-                              //       NotePreviewCard(
-                              //         key: ValueKey(item.id),
-                              //         title: item.title,
-                              //         content: item.content,
-                              //         onCardClick: () =>
-                              //             _deleteNoteDialogBuilder(
-                              //               context,
-                              //               item,
-                              //             ),
-                              //       ),
-                              // ),
+                              sliver: switch (state.displayMode) {
+                                DisplayMode.MasonryGrid =>
+                                  AppPagingSliverMasonryGrid<Note>(
+                                    state: state.notePagingState!,
+                                    mainAxisSpacing: 4,
+                                    crossAxisSpacing: 4,
+                                    maxCrossAxisExtent: windowWidth / 2,
+                                    onFetchNextPage: () {
+                                      context.read<ListingBloc>().add(
+                                        ListingEvent.fetchNotesPagingNext(),
+                                      );
+                                    },
+                                    onRetry: () {
+                                      context.read<ListingBloc>().add(
+                                        ListingEvent.fetchNotesPagingNext(),
+                                      );
+                                    },
+                                    itemContent: (context, item, index) =>
+                                        GridPreviewCard(
+                                          key: ValueKey(item.id),
+                                          title: item.title,
+                                          content: item.content,
+                                          onCardLongPress: () =>
+                                              _deleteNoteDialogBuilder(
+                                                context,
+                                                item,
+                                              ),
+                                          onCardClick: () =>
+                                              _navigateAndRefresh(
+                                                context,
+                                                item.id,
+                                              ),
+                                        ),
+                                  ),
+                                DisplayMode.List => AppPagingSliverList<Note>(
+                                  state: state.notePagingState!,
+                                  onFetchNextPage: () {
+                                    context.read<ListingBloc>().add(
+                                      ListingEvent.fetchNotesPagingNext(),
+                                    );
+                                  },
+                                  onRetry: () {
+                                    context.read<ListingBloc>().add(
+                                      ListingEvent.fetchNotesPagingNext(),
+                                    );
+                                  },
+                                  itemContent: (context, item, index) =>
+                                      ListPreviewCard(
+                                        key: ValueKey(item.id),
+                                        title: item.title,
+                                        content: item.content,
+                                        onCardLongPress: () =>
+                                            _deleteNoteDialogBuilder(
+                                              context,
+                                              item,
+                                            ),
+                                        onCardClick: () => _navigateAndRefresh(
+                                          context,
+                                          item.id,
+                                        ),
+                                      ),
+                                ),
+                              },
                             ),
                           ),
                         ],
                       )
-                    : Text("something wrong"),
+                    : Column(
+                        children: [
+                          Text("something went wrong"),
+                          TextButton(
+                            onPressed: () {
+                              context.read<ListingBloc>().add(
+                                ListingEvent.refresh(),
+                              );
+                            },
+                            child: Text("Retry"),
+                          ),
+                        ],
+                      ),
               ),
             ),
           );
@@ -200,11 +298,11 @@ class _ListingLayout extends StatelessWidget {
   }
 
   Future<void> _deleteNoteDialogBuilder(
-    BuildContext mainContext,
+    BuildContext parentContext,
     Note selectedNote,
   ) {
     return showDialog<void>(
-      context: mainContext,
+      context: parentContext,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Delete Note'),
@@ -225,7 +323,7 @@ class _ListingLayout extends StatelessWidget {
               ),
               child: const Text('Delete'),
               onPressed: () {
-                mainContext.read<ListingBloc>().add(
+                parentContext.read<ListingBloc>().add(
                   ListingEvent.deleteNote(selectedNote),
                 );
                 Navigator.of(context).pop();

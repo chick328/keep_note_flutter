@@ -2,26 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:keep_note/presentation/ui/common/paging/app_paging_state.dart';
 
-class AppPagingView<T> extends StatelessWidget {
-  const AppPagingView({
+class AppPagingSliverList<T> extends StatelessWidget {
+  const AppPagingSliverList({
     super.key,
     required this.state,
-    required this.fetchNextPage,
+    required this.onFetchNextPage,
     required this.itemContent,
+    required this.onRetry,
   });
 
   final AppPagingState<T> state;
-
-  final Function() fetchNextPage;
-
+  final Function() onFetchNextPage;
+  final Function() onRetry;
   final Widget Function(BuildContext context, T item, int index) itemContent;
 
   @override
-  Widget build(BuildContext context) => PagedListView<int, T>(
+  Widget build(BuildContext context) => PagedSliverList<int, T>(
     state: state,
-    fetchNextPage: fetchNextPage,
+    fetchNextPage: onFetchNextPage,
     builderDelegate: PagedChildBuilderDelegate(
       itemBuilder: (context, item, index) => itemContent(context, item, index),
+      noItemsFoundIndicatorBuilder: (context) => _NoItemIndicator(),
+      newPageProgressIndicatorBuilder: (context) => _LoadingIndicator(),
+      firstPageProgressIndicatorBuilder: (context) => _LoadingIndicator(),
+      firstPageErrorIndicatorBuilder: (context) =>
+          _ErrorIndicator(errorMsg: state.error.toString(), onRetry: onRetry),
+      newPageErrorIndicatorBuilder: (context) =>
+          _ErrorIndicator(errorMsg: state.error.toString(), onRetry: onRetry),
     ),
   );
 }

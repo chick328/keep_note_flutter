@@ -2,7 +2,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/utils/utils.dart';
 
 import '../../domain/note/model/note.dart';
-import '../../domain/util/result.dart';
 import 'model/note_entity.dart';
 
 class NoteDao {
@@ -79,6 +78,26 @@ class NoteDao {
     return list.first;
   }
 
+  Future<List<NoteEntity>> fetchByTitleAndContent(String keyword) async {
+    final entries = await _database.query(
+      _noteTableName,
+      where: '$_titleColumnName LIKE ? OR $_contentColumnName LIKE ?',
+      orderBy: '$_idColumnName DESC',
+      whereArgs: ['%$keyword%', '%$keyword%'],
+    );
+
+    final list = entries
+        .map(
+          (element) => NoteEntity(
+        id: element[_idColumnName] as int,
+        title: element[_titleColumnName] as String,
+        content: element[_contentColumnName] as String,
+      ),
+    )
+        .toList();
+    return list;
+  }
+
   Future<void> insert(Note note) async {
     await _database.insert(_noteTableName, {
       _titleColumnName: note.title ?? "",
@@ -113,10 +132,8 @@ class NoteDao {
       final count = firstIntValue(
         await _database.query(_noteTableName, columns: ['COUNT(*)']),
       );
-      // return Result.ok(listing);
       return count ?? 0;
     } on Exception catch (e) {
-      // return Result.error(e);
       return 0;
     }
   }
@@ -131,12 +148,4 @@ class NoteDao {
       }
     } on Exception catch (e) {}
   }
-  //
-  // Map<String, dynamic> noteEntityToDbMap(NoteEntity note) {
-  //   return {
-  //     _idColumnName: note.id,
-  //     _titleColumnName: note.title,
-  //     _contentColumnName: note.content,
-  //   };
-  // }
 }

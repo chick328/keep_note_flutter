@@ -1,4 +1,5 @@
-import 'package:keep_note/data/common/app_database.dart';
+import 'package:keep_note/data/app_database.dart';
+import 'package:keep_note/data/note/model/note_entity.dart';
 import 'package:keep_note/domain/note/model/note.dart';
 import 'package:keep_note/domain/note/note_repository.dart';
 import 'package:keep_note/domain/util/result.dart';
@@ -37,13 +38,20 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Future<Result<List<Note>>> getAllNotes() async {
+  Future<Result<List<Note>>> getAllNotes(String? searchKeyword) async {
     try {
       if (!_database.isOpen()) {
         await _database.open();
       }
 
-      var result = await _database.noteDao?.fetchAll();
+      final List<NoteEntity>? result;
+
+      if (searchKeyword != null) {
+        result = await _database.noteDao?.fetchByTitleAndContent(searchKeyword);
+      } else {
+        result = await _database.noteDao?.fetchAll();
+      }
+
       return Result.success(
         result?.map((e) => e.toNote()).toList() ?? List.empty(),
       );
@@ -59,7 +67,10 @@ class NoteRepositoryImpl extends NoteRepository {
         await _database.open();
       }
       // await Future.delayed(Duration(seconds: 2));
-      var result = await _database.noteDao?.fetchPaginated(pageSize, (page - 1) * pageSize);
+      var result = await _database.noteDao?.fetchPaginated(
+        pageSize,
+        (page - 1) * pageSize,
+      );
       return Result.success(
         result?.map((e) => e.toNote()).toList() ?? List.empty(),
       );
@@ -75,7 +86,7 @@ class NoteRepositoryImpl extends NoteRepository {
         await _database.open();
       }
 
-      var result = await _database.noteDao?.fetchById(id);
+      final result = await _database.noteDao?.fetchById(id);
       return Result.success(result!.toNote());
     } on Exception catch (e) {
       return Result.error(e);
@@ -83,7 +94,7 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Future<Result<void>> insertOrUpdateNote(Note note) async{
+  Future<Result<void>> insertOrUpdateNote(Note note) async {
     try {
       if (!_database.isOpen()) {
         await _database.open();
@@ -91,9 +102,9 @@ class NoteRepositoryImpl extends NoteRepository {
 
       if (note.id == null) {
         await _database.noteDao?.insert(note);
-      }else {
-       await _database.noteDao?.update(note);
-    }
+      } else {
+        await _database.noteDao?.update(note);
+      }
       return Result.success(null);
     } on Exception catch (e) {
       return Result.error(e);
