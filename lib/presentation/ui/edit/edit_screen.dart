@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../bloc/edit/edit_bloc.dart';
 import '../common/gesture/dismiss_keyboard.dart';
@@ -27,7 +31,21 @@ class EditScreen extends StatelessWidget {
 }
 
 class _EditLayout extends StatelessWidget {
-  const _EditLayout({super.key});
+  _EditLayout({super.key});
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(BuildContext context, ImageSource source) async {
+    if (context.mounted) {
+      final XFile? pickedImage = await _picker.pickImage(source: source);
+
+      if (pickedImage != null) {
+        context.read<EditBloc>().add(
+          EditEvent.pickImages([File(pickedImage.path)]),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +75,10 @@ class _EditLayout extends StatelessWidget {
                     autofocus: true,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
-                    style: Theme.of(context).textTheme.headlineLarge,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headlineLarge,
                     decoration: InputDecoration.collapsed(
                       hintText: "Title",
                       border: InputBorder.none,
@@ -77,12 +98,15 @@ class _EditLayout extends StatelessWidget {
                     ),
                     child: TextField(
                       controller:
-                          TextEditingController(text: state.note.content)
-                            ..selection = TextSelection.collapsed(
-                              offset: state.note.content?.length ?? 0,
-                            ),
+                      TextEditingController(text: state.note.content)
+                        ..selection = TextSelection.collapsed(
+                          offset: state.note.content?.length ?? 0,
+                        ),
                       maxLines: null,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
                       keyboardType: TextInputType.multiline,
                       decoration: InputDecoration.collapsed(
                         hintText: "Content",
@@ -96,12 +120,95 @@ class _EditLayout extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  color: Colors.amber,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(16.0),
-                  child: SafeArea(child: Text('Stuck to the bottom')),
+                if (state.pickedImages.isNotEmpty) ...[
+                  Divider(),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        padding: const EdgeInsetsGeometry.symmetric(
+                          horizontal: 16.0,
+                          vertical: 4.0,
+                        ),
+                        scrollDirection: Axis.horizontal,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: constraints.maxWidth,
+                          ),
+                          child: Row(
+                            spacing: 8.0,
+                            children: [
+                              for (var image in state.pickedImages)
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  child: Image.file(
+                                    image,
+                                    height: 100,
+                                    width: 100,
+                                    fit: BoxFit.fill,
+                                    errorBuilder: (_, _, _) {
+                                      return Container(
+                                        width: 100,
+                                        height: 100,
+                                        alignment: Alignment.center,
+                                        color: Colors.grey,
+                                        child: Icon(Icons.error_outline),
+                                      );
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsetsGeometry.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    child: Row(
+                      spacing: 8.0,
+                      children: [
+                        IconButton(
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.grey.withValues(alpha: 0.4),
+                          ),
+                          icon: Icon(Icons.photo_camera),
+                          onPressed: () {
+                            if (state.pickedImages.length <= 5) {
+                              _pickImage(context, ImageSource.camera);
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(
+                                  SnackBar(content: Text('Reach Limit')),
+                                );
+                            }
+                          },
+                        ),
+                        IconButton(
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.grey.withValues(alpha: 0.4),
+                          ),
+                          icon: Icon(Icons.photo_rounded),
+                          onPressed: () {
+                            if (state.pickedImages.length < 5) {
+                              _pickImage(context, ImageSource.gallery);
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(
+                                  SnackBar(content: Text('Reach Limit')),
+                                );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

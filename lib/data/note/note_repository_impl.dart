@@ -38,7 +38,7 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Future<Result<List<Note>>> getAllNotes(String? searchKeyword) async {
+  Future<Result<List<Note>>> getAllNotes({String? searchKeyword}) async {
     try {
       if (!_database.isOpen()) {
         await _database.open();

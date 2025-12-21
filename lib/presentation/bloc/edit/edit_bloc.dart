@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -48,6 +50,13 @@ class EditBloc extends Bloc<EditEvent, EditState>
               case Error():
             }
           }
+        },
+        pickImages: (event) {
+          emit(
+            state.copyWith(
+              pickedImages: [...event.images, ...state.pickedImages],
+            ),
+          );
         },
       );
     });

@@ -55,14 +55,15 @@ extension EditEventPatterns on EditEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchNoteById value)?  fetchNoteById,TResult Function( _OnTitleChanged value)?  onTitleChanged,TResult Function( _OnContentChanged value)?  onContentChanged,TResult Function( _SaveNote value)?  saveNote,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchNoteById value)?  fetchNoteById,TResult Function( _OnTitleChanged value)?  onTitleChanged,TResult Function( _OnContentChanged value)?  onContentChanged,TResult Function( _SaveNote value)?  saveNote,TResult Function( _PickImages value)?  pickImages,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that);case _OnContentChanged() when onContentChanged != null:
 return onContentChanged(_that);case _SaveNote() when saveNote != null:
-return saveNote(_that);case _:
+return saveNote(_that);case _PickImages() when pickImages != null:
+return pickImages(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return saveNote(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchNoteById value)  fetchNoteById,required TResult Function( _OnTitleChanged value)  onTitleChanged,required TResult Function( _OnContentChanged value)  onContentChanged,required TResult Function( _SaveNote value)  saveNote,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchNoteById value)  fetchNoteById,required TResult Function( _OnTitleChanged value)  onTitleChanged,required TResult Function( _OnContentChanged value)  onContentChanged,required TResult Function( _SaveNote value)  saveNote,required TResult Function( _PickImages value)  pickImages,}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById():
 return fetchNoteById(_that);case _OnTitleChanged():
 return onTitleChanged(_that);case _OnContentChanged():
 return onContentChanged(_that);case _SaveNote():
-return saveNote(_that);}
+return saveNote(_that);case _PickImages():
+return pickImages(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -101,14 +103,15 @@ return saveNote(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchNoteById value)?  fetchNoteById,TResult? Function( _OnTitleChanged value)?  onTitleChanged,TResult? Function( _OnContentChanged value)?  onContentChanged,TResult? Function( _SaveNote value)?  saveNote,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchNoteById value)?  fetchNoteById,TResult? Function( _OnTitleChanged value)?  onTitleChanged,TResult? Function( _OnContentChanged value)?  onContentChanged,TResult? Function( _SaveNote value)?  saveNote,TResult? Function( _PickImages value)?  pickImages,}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that);case _OnContentChanged() when onContentChanged != null:
 return onContentChanged(_that);case _SaveNote() when saveNote != null:
-return saveNote(_that);case _:
+return saveNote(_that);case _PickImages() when pickImages != null:
+return pickImages(_that);case _:
   return null;
 
 }
@@ -125,13 +128,14 @@ return saveNote(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  fetchNoteById,TResult Function( String title)?  onTitleChanged,TResult Function( String content)?  onContentChanged,TResult Function()?  saveNote,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  fetchNoteById,TResult Function( String title)?  onTitleChanged,TResult Function( String content)?  onContentChanged,TResult Function()?  saveNote,TResult Function( List<File> images)?  pickImages,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that.id);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that.title);case _OnContentChanged() when onContentChanged != null:
 return onContentChanged(_that.content);case _SaveNote() when saveNote != null:
-return saveNote();case _:
+return saveNote();case _PickImages() when pickImages != null:
+return pickImages(_that.images);case _:
   return orElse();
 
 }
@@ -149,13 +153,14 @@ return saveNote();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  fetchNoteById,required TResult Function( String title)  onTitleChanged,required TResult Function( String content)  onContentChanged,required TResult Function()  saveNote,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  fetchNoteById,required TResult Function( String title)  onTitleChanged,required TResult Function( String content)  onContentChanged,required TResult Function()  saveNote,required TResult Function( List<File> images)  pickImages,}) {final _that = this;
 switch (_that) {
 case _FetchNoteById():
 return fetchNoteById(_that.id);case _OnTitleChanged():
 return onTitleChanged(_that.title);case _OnContentChanged():
 return onContentChanged(_that.content);case _SaveNote():
-return saveNote();}
+return saveNote();case _PickImages():
+return pickImages(_that.images);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +174,14 @@ return saveNote();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  fetchNoteById,TResult? Function( String title)?  onTitleChanged,TResult? Function( String content)?  onContentChanged,TResult? Function()?  saveNote,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  fetchNoteById,TResult? Function( String title)?  onTitleChanged,TResult? Function( String content)?  onContentChanged,TResult? Function()?  saveNote,TResult? Function( List<File> images)?  pickImages,}) {final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that.id);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that.title);case _OnContentChanged() when onContentChanged != null:
 return onContentChanged(_that.content);case _SaveNote() when saveNote != null:
-return saveNote();case _:
+return saveNote();case _PickImages() when pickImages != null:
+return pickImages(_that.images);case _:
   return null;
 
 }
@@ -414,6 +420,78 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _PickImages implements EditEvent {
+  const _PickImages(final  List<File> images): _images = images;
+  
+
+ final  List<File> _images;
+ List<File> get images {
+  if (_images is EqualUnmodifiableListView) return _images;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_images);
+}
+
+
+/// Create a copy of EditEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$PickImagesCopyWith<_PickImages> get copyWith => __$PickImagesCopyWithImpl<_PickImages>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PickImages&&const DeepCollectionEquality().equals(other._images, _images));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_images));
+
+@override
+String toString() {
+  return 'EditEvent.pickImages(images: $images)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$PickImagesCopyWith<$Res> implements $EditEventCopyWith<$Res> {
+  factory _$PickImagesCopyWith(_PickImages value, $Res Function(_PickImages) _then) = __$PickImagesCopyWithImpl;
+@useResult
+$Res call({
+ List<File> images
+});
+
+
+
+
+}
+/// @nodoc
+class __$PickImagesCopyWithImpl<$Res>
+    implements _$PickImagesCopyWith<$Res> {
+  __$PickImagesCopyWithImpl(this._self, this._then);
+
+  final _PickImages _self;
+  final $Res Function(_PickImages) _then;
+
+/// Create a copy of EditEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? images = null,}) {
+  return _then(_PickImages(
+null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
+as List<File>,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$EditPresentationEvent {
 
 
@@ -640,7 +718,7 @@ String toString() {
 /// @nodoc
 mixin _$EditState {
 
- Note get note;
+ Note get note; List<File> get pickedImages;
 /// Create a copy of EditState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -651,16 +729,16 @@ $EditStateCopyWith<EditState> get copyWith => _$EditStateCopyWithImpl<EditState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditState&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditState&&(identical(other.note, note) || other.note == note)&&const DeepCollectionEquality().equals(other.pickedImages, pickedImages));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,note);
+int get hashCode => Object.hash(runtimeType,note,const DeepCollectionEquality().hash(pickedImages));
 
 @override
 String toString() {
-  return 'EditState(note: $note)';
+  return 'EditState(note: $note, pickedImages: $pickedImages)';
 }
 
 
@@ -671,7 +749,7 @@ abstract mixin class $EditStateCopyWith<$Res>  {
   factory $EditStateCopyWith(EditState value, $Res Function(EditState) _then) = _$EditStateCopyWithImpl;
 @useResult
 $Res call({
- Note note
+ Note note, List<File> pickedImages
 });
 
 
@@ -688,10 +766,11 @@ class _$EditStateCopyWithImpl<$Res>
 
 /// Create a copy of EditState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? note = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? note = null,Object? pickedImages = null,}) {
   return _then(EditState(
 note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
-as Note,
+as Note,pickedImages: null == pickedImages ? _self.pickedImages : pickedImages // ignore: cast_nullable_to_non_nullable
+as List<File>,
   ));
 }
 

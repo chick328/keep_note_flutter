@@ -29,7 +29,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
     on<ListingEvent>((event, emit) async {
       await event.map(
         searchNotes: (event) async {
-          final result = await _noteRepository.getAllNotes(event.keyword);
+          final result = await _noteRepository.getAllNotes(searchKeyword: event.keyword);
           print("$result");
           switch (result) {
             case Success<List<Note>>():

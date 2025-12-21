@@ -1,17 +1,16 @@
-import 'dart:ui';
-
 import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:keep_note/domain/note/model/display_mode.dart';
 import 'package:keep_note/presentation/bloc/listing/listing_bloc.dart';
 import 'package:keep_note/presentation/ui/common/app_sliver_persistent_header.dart';
 import 'package:keep_note/presentation/ui/listing/widget/listing_preview_card.dart';
 import 'package:keep_note/routing/routes.dart';
+import 'package:path/path.dart';
 
 import '../../../domain/note/model/note.dart';
 import '../common/gesture/dismiss_keyboard.dart';
