@@ -71,11 +71,13 @@ class ListPreviewCard extends StatelessWidget {
                 title ?? "",
                 style: Theme.of(context).textTheme.bodyLarge,
                 maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               Text(
                 content ?? "",
                 style: Theme.of(context).textTheme.bodyMedium,
                 maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

@@ -29,7 +29,9 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
     on<ListingEvent>((event, emit) async {
       await event.map(
         searchNotes: (event) async {
-          final result = await _noteRepository.getAllNotes(searchKeyword: event.keyword);
+          final result = await _noteRepository.getAllNotes(
+            searchKeyword: event.keyword,
+          );
           print("$result");
           switch (result) {
             case Success<List<Note>>():
@@ -72,9 +74,9 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
           sharedPrefManager.setListingDisplayMode(event.mode);
           emit(state.copyWith(displayMode: event.mode));
         },
-        getDisplayMode: (event) async{
-          final result = await sharedPrefManager.getListingDisplayMode();
-          if (result != null){
+        getDisplayMode: (event) async {
+          final result = await _sharedPrefManager.getListingDisplayMode();
+          if (result != null) {
             emit(state.copyWith(displayMode: result));
           }
         },

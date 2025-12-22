@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,7 +57,7 @@ class _EditLayout extends StatelessWidget {
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
                   context.read<EditBloc>().add(EditEvent.saveNote());
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
               ),
               actions: [IconButton(onPressed: () {}, icon: Icon(Icons.delete))],
@@ -75,10 +74,7 @@ class _EditLayout extends StatelessWidget {
                     autofocus: true,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headlineLarge,
+                    style: Theme.of(context).textTheme.headlineLarge,
                     decoration: InputDecoration.collapsed(
                       hintText: "Title",
                       border: InputBorder.none,
@@ -98,15 +94,12 @@ class _EditLayout extends StatelessWidget {
                     ),
                     child: TextField(
                       controller:
-                      TextEditingController(text: state.note.content)
-                        ..selection = TextSelection.collapsed(
-                          offset: state.note.content?.length ?? 0,
-                        ),
+                          TextEditingController(text: state.note.content)
+                            ..selection = TextSelection.collapsed(
+                              offset: state.note.content?.length ?? 0,
+                            ),
                       maxLines: null,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       keyboardType: TextInputType.multiline,
                       decoration: InputDecoration.collapsed(
                         hintText: "Content",
@@ -120,7 +113,7 @@ class _EditLayout extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (state.pickedImages.isNotEmpty) ...[
+                if ((state.note.imagePaths ?? []).isNotEmpty) ...[
                   Divider(),
                   LayoutBuilder(
                     builder: (context, constraints) {
@@ -137,11 +130,12 @@ class _EditLayout extends StatelessWidget {
                           child: Row(
                             spacing: 8.0,
                             children: [
-                              for (var image in state.pickedImages)
+                              for (String imagePath
+                                  in state.note.imagePaths ?? [])
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(16.0),
                                   child: Image.file(
-                                    image,
+                                    File(imagePath),
                                     height: 100,
                                     width: 100,
                                     fit: BoxFit.fill,

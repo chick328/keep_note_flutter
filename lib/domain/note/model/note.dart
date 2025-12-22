@@ -8,13 +8,10 @@ part 'note.freezed.dart';
 abstract class Note with _$Note {
   const Note._();
 
-  const factory Note({int? id, String? title, String? content}) = _Note;
-
-  NoteEntity toNoteEntity() {
-    try {
-      return NoteEntity(id: id!, title: title, content: content);
-    } on Exception catch (e) {
-      rethrow;
-    }
-  }
+  const factory Note({
+    int? id,
+    String? title,
+    String? content,
+    List<String>? imagePaths,
+  }) = _Note;
 }

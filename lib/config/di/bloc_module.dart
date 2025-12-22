@@ -9,5 +9,7 @@ void configureBlocModuleDependencies() {
   locator.registerFactory<ListingBloc>(
     () => ListingBloc(noteRepository: locator(), sharedPrefManager: locator()),
   );
-  locator.registerFactory<EditBloc>(() => EditBloc(noteRepository: locator()));
+  locator.registerFactory<EditBloc>(
+    () => EditBloc(noteRepository: locator(), saveNoteImageUseCase: locator()),
+  );
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Note implements DiagnosticableTreeMixin {
 
- int? get id; String? get title; String? get content;
+ int? get id; String? get title; String? get content; List<String>? get imagePaths; DateTime? get lastModifyDate;
 /// Create a copy of Note
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,21 +26,21 @@ $NoteCopyWith<Note> get copyWith => _$NoteCopyWithImpl<Note>(this as Note, _$ide
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'Note'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('title', title))..add(DiagnosticsProperty('content', content));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('title', title))..add(DiagnosticsProperty('content', content))..add(DiagnosticsProperty('imagePaths', imagePaths))..add(DiagnosticsProperty('lastModifyDate', lastModifyDate));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Note&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Note&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&const DeepCollectionEquality().equals(other.imagePaths, imagePaths)&&(identical(other.lastModifyDate, lastModifyDate) || other.lastModifyDate == lastModifyDate));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,content);
+int get hashCode => Object.hash(runtimeType,id,title,content,const DeepCollectionEquality().hash(imagePaths),lastModifyDate);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'Note(id: $id, title: $title, content: $content)';
+  return 'Note(id: $id, title: $title, content: $content, imagePaths: $imagePaths, lastModifyDate: $lastModifyDate)';
 }
 
 
@@ -51,7 +51,7 @@ abstract mixin class $NoteCopyWith<$Res>  {
   factory $NoteCopyWith(Note value, $Res Function(Note) _then) = _$NoteCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? title, String? content
+ int? id, String? title, String? content, List<String>? imagePaths, DateTime? lastModifyDate
 });
 
 
@@ -68,12 +68,14 @@ class _$NoteCopyWithImpl<$Res>
 
 /// Create a copy of Note
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? title = freezed,Object? content = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? title = freezed,Object? content = freezed,Object? imagePaths = freezed,Object? lastModifyDate = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String?,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,imagePaths: freezed == imagePaths ? _self.imagePaths : imagePaths // ignore: cast_nullable_to_non_nullable
+as List<String>?,lastModifyDate: freezed == lastModifyDate ? _self.lastModifyDate : lastModifyDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -158,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? title,  String? content)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? title,  String? content,  List<String>? imagePaths,  DateTime? lastModifyDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Note() when $default != null:
-return $default(_that.id,_that.title,_that.content);case _:
+return $default(_that.id,_that.title,_that.content,_that.imagePaths,_that.lastModifyDate);case _:
   return orElse();
 
 }
@@ -179,10 +181,10 @@ return $default(_that.id,_that.title,_that.content);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? title,  String? content)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? title,  String? content,  List<String>? imagePaths,  DateTime? lastModifyDate)  $default,) {final _that = this;
 switch (_that) {
 case _Note():
-return $default(_that.id,_that.title,_that.content);case _:
+return $default(_that.id,_that.title,_that.content,_that.imagePaths,_that.lastModifyDate);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +201,10 @@ return $default(_that.id,_that.title,_that.content);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? title,  String? content)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? title,  String? content,  List<String>? imagePaths,  DateTime? lastModifyDate)?  $default,) {final _that = this;
 switch (_that) {
 case _Note() when $default != null:
-return $default(_that.id,_that.title,_that.content);case _:
+return $default(_that.id,_that.title,_that.content,_that.imagePaths,_that.lastModifyDate);case _:
   return null;
 
 }
@@ -214,12 +216,22 @@ return $default(_that.id,_that.title,_that.content);case _:
 
 
 class _Note extends Note with DiagnosticableTreeMixin {
-  const _Note({this.id, this.title, this.content}): super._();
+  const _Note({this.id, this.title, this.content, final  List<String>? imagePaths, this.lastModifyDate}): _imagePaths = imagePaths,super._();
   
 
 @override final  int? id;
 @override final  String? title;
 @override final  String? content;
+ final  List<String>? _imagePaths;
+@override List<String>? get imagePaths {
+  final value = _imagePaths;
+  if (value == null) return null;
+  if (_imagePaths is EqualUnmodifiableListView) return _imagePaths;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+@override final  DateTime? lastModifyDate;
 
 /// Create a copy of Note
 /// with the given fields replaced by the non-null parameter values.
@@ -232,21 +244,21 @@ _$NoteCopyWith<_Note> get copyWith => __$NoteCopyWithImpl<_Note>(this, _$identit
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'Note'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('title', title))..add(DiagnosticsProperty('content', content));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('title', title))..add(DiagnosticsProperty('content', content))..add(DiagnosticsProperty('imagePaths', imagePaths))..add(DiagnosticsProperty('lastModifyDate', lastModifyDate));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Note&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Note&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&const DeepCollectionEquality().equals(other._imagePaths, _imagePaths)&&(identical(other.lastModifyDate, lastModifyDate) || other.lastModifyDate == lastModifyDate));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,content);
+int get hashCode => Object.hash(runtimeType,id,title,content,const DeepCollectionEquality().hash(_imagePaths),lastModifyDate);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'Note(id: $id, title: $title, content: $content)';
+  return 'Note(id: $id, title: $title, content: $content, imagePaths: $imagePaths, lastModifyDate: $lastModifyDate)';
 }
 
 
@@ -257,7 +269,7 @@ abstract mixin class _$NoteCopyWith<$Res> implements $NoteCopyWith<$Res> {
   factory _$NoteCopyWith(_Note value, $Res Function(_Note) _then) = __$NoteCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? title, String? content
+ int? id, String? title, String? content, List<String>? imagePaths, DateTime? lastModifyDate
 });
 
 
@@ -274,12 +286,14 @@ class __$NoteCopyWithImpl<$Res>
 
 /// Create a copy of Note
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? title = freezed,Object? content = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? title = freezed,Object? content = freezed,Object? imagePaths = freezed,Object? lastModifyDate = freezed,}) {
   return _then(_Note(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String?,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,imagePaths: freezed == imagePaths ? _self._imagePaths : imagePaths // ignore: cast_nullable_to_non_nullable
+as List<String>?,lastModifyDate: freezed == lastModifyDate ? _self.lastModifyDate : lastModifyDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

@@ -151,6 +151,6 @@ class _NoItemIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("no item"));
+    return Center(child: Text("No Item"));
   }
 }

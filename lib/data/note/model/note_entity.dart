@@ -8,9 +8,14 @@ part 'note_entity.freezed.dart';
 abstract class NoteEntity with _$NoteEntity {
   const NoteEntity._();
 
-  const factory NoteEntity({required int id, String? title, String? content}) =
-      _NoteEntity;
+  const factory NoteEntity({
+    required int id,
+    String? title,
+    String? content,
+    List<String>? imagePaths,
+    required DateTime createDate,
+    required DateTime lastModifyDate,
+  }) = _NoteEntity;
 
-  Note toNote() =>
-      Note(id: id, title: title, content: content);
+  Note toNote() => Note(id: id, title: title, content: content, imagePaths: imagePaths);
 }
