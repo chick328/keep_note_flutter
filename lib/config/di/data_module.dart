@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:keep_note/data/local_notification_manager.dart';
 import 'package:keep_note/data/note/note_repository_impl.dart';
 import 'package:keep_note/data/shared_pref_manager_impl.dart';
 import 'package:keep_note/domain/image_repository.dart';
@@ -15,7 +16,6 @@ void configureDataModuleDependencies() {
   locator.registerLazySingleton<AppDatabase>(
     () => AppDatabase(databaseFactory: databaseFactory),
   );
-
   locator.registerLazySingleton<SharedPrefManager>(
     () => SharedPrefManagerImpl(),
   );
@@ -25,4 +25,8 @@ void configureDataModuleDependencies() {
   );
 
   locator.registerLazySingleton<ImageRepository>(() => ImageRepositoryImpl());
+
+  locator.registerLazySingleton<LocalNotificationManager>(
+    () => LocalNotificationManager(),
+  );
 }

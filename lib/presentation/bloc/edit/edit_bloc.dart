@@ -68,7 +68,7 @@ class EditBloc extends Bloc<EditEvent, EditState>
               );
             case Error():
           }
-        },
+        }, scheduleNotification: (_ScheduleNotification value) {  },
       );
     });
   }

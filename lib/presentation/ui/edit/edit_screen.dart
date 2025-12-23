@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -60,7 +61,25 @@ class _EditLayout extends StatelessWidget {
                   context.pop();
                 },
               ),
-              actions: [IconButton(onPressed: () {}, icon: Icon(Icons.delete))],
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.notifications_active),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _scheduleNotificationDialogBuilder(
+                        context,
+                      initialDateTime: state.note.scheduledNotificationDateTime,
+                      onConfirm: (dateTime) {
+                        context.read<EditBloc>().add(EditEvent.scheduleNotification(dateTime));
+                      }
+                    );
+                  },
+                  icon: Icon(Icons.notifications_outlined),
+                ),
+                IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+              ],
             ),
             body: Column(
               children: [
@@ -209,6 +228,88 @@ class _EditLayout extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  Future<void> _scheduleNotificationDialogBuilder(
+    BuildContext parentContext, {
+    DateTime? initialDateTime,
+    Function(DateTime dateTime)? onConfirm,
+  }) {
+    final currentDateTime = DateTime.now();
+    DateTime selectedDateTime = currentDateTime.add(const Duration(hours: 1));
+
+    return showDialog<void>(
+      context: parentContext,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Container(
+            height: 350.0,
+            width: double.infinity,
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsetsGeometry.all(16.0),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child:Text(
+                      "Schedule Notification",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Flexible(
+                    child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.dateAndTime,
+                      initialDateTime:
+                          initialDateTime ??
+                          currentDateTime.add(const Duration(hours: 1)),
+                      minimumDate: currentDateTime,
+                      maximumDate: currentDateTime.add(
+                        const Duration(days: 365),
+                      ),
+                      use24hFormat: true,
+                      onDateTimeChanged: (DateTime newDateTime) {
+                        // Handle the new date/time here
+                        print("$newDateTime");
+                        selectedDateTime = newDateTime;
+                      },
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          context.pop();
+                        },
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text('Confirm'),
+                        onPressed: () {
+                            onConfirm?.call(selectedDateTime);
+                            context.pop();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

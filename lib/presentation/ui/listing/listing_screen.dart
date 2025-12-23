@@ -2,6 +2,7 @@ import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keep_note/domain/note/model/display_mode.dart';
@@ -34,7 +35,6 @@ class _ListingLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final windowWidth = MediaQuery.sizeOf(context).width;
-    final windowHeight = MediaQuery.sizeOf(context).height;
 
     return BlocPresentationListener<ListingBloc, ListingPresentationEvent>(
       listener: (context, event) {
@@ -226,21 +226,21 @@ class _ListingLayout extends StatelessWidget {
                                     },
                                     itemContent: (context, item, index) =>
                                         GridPreviewCard(
-                                            key: ValueKey(item.id),
-                                            title: item.title,
-                                            content: item.content,
-                                            images: item.imagePaths,
-                                            onCardLongPress: () =>
-                                                _deleteNoteDialogBuilder(
-                                                  context,
-                                                  item,
-                                                ),
-                                            onCardClick: () =>
-                                                _navigateAndRefresh(
-                                                  context,
-                                                  item.id,
-                                                ),
-                                          ),
+                                          key: ValueKey(item.id),
+                                          title: item.title,
+                                          content: item.content,
+                                          images: item.imagePaths,
+                                          onCardLongPress: () =>
+                                              _deleteNoteDialogBuilder(
+                                                context,
+                                                item,
+                                              ),
+                                          onCardClick: () =>
+                                              _navigateAndRefresh(
+                                                context,
+                                                item.id,
+                                              ),
+                                        ),
                                   ),
                                 DisplayMode.List => AppPagingSliverList<Note>(
                                   state: state.notePagingState!,
@@ -307,14 +307,14 @@ class _ListingLayout extends StatelessWidget {
         return AlertDialog(
           title: const Text('Delete Note'),
           content: const Text('Are you sure?'),
-          actions: <Widget>[
+          actions: [
             TextButton(
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: const Text('No'),
               onPressed: () {
-                Navigator.of(context).pop();
+                context.pop();
               },
             ),
             TextButton(
@@ -326,7 +326,7 @@ class _ListingLayout extends StatelessWidget {
                 parentContext.read<ListingBloc>().add(
                   ListingEvent.deleteNote(selectedNote),
                 );
-                Navigator.of(context).pop();
+                context.pop();
               },
             ),
           ],

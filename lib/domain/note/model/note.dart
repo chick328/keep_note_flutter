@@ -13,5 +13,6 @@ abstract class Note with _$Note {
     String? title,
     String? content,
     List<String>? imagePaths,
+    DateTime? scheduledNotificationDateTime
   }) = _Note;
 }

@@ -55,7 +55,7 @@ extension EditEventPatterns on EditEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchNoteById value)?  fetchNoteById,TResult Function( _OnTitleChanged value)?  onTitleChanged,TResult Function( _OnContentChanged value)?  onContentChanged,TResult Function( _SaveNote value)?  saveNote,TResult Function( _PickImages value)?  pickImages,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchNoteById value)?  fetchNoteById,TResult Function( _OnTitleChanged value)?  onTitleChanged,TResult Function( _OnContentChanged value)?  onContentChanged,TResult Function( _SaveNote value)?  saveNote,TResult Function( _PickImages value)?  pickImages,TResult Function( _ScheduleNotification value)?  scheduleNotification,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
@@ -63,7 +63,8 @@ return fetchNoteById(_that);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that);case _OnContentChanged() when onContentChanged != null:
 return onContentChanged(_that);case _SaveNote() when saveNote != null:
 return saveNote(_that);case _PickImages() when pickImages != null:
-return pickImages(_that);case _:
+return pickImages(_that);case _ScheduleNotification() when scheduleNotification != null:
+return scheduleNotification(_that);case _:
   return orElse();
 
 }
@@ -81,7 +82,7 @@ return pickImages(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchNoteById value)  fetchNoteById,required TResult Function( _OnTitleChanged value)  onTitleChanged,required TResult Function( _OnContentChanged value)  onContentChanged,required TResult Function( _SaveNote value)  saveNote,required TResult Function( _PickImages value)  pickImages,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchNoteById value)  fetchNoteById,required TResult Function( _OnTitleChanged value)  onTitleChanged,required TResult Function( _OnContentChanged value)  onContentChanged,required TResult Function( _SaveNote value)  saveNote,required TResult Function( _PickImages value)  pickImages,required TResult Function( _ScheduleNotification value)  scheduleNotification,}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById():
@@ -89,7 +90,8 @@ return fetchNoteById(_that);case _OnTitleChanged():
 return onTitleChanged(_that);case _OnContentChanged():
 return onContentChanged(_that);case _SaveNote():
 return saveNote(_that);case _PickImages():
-return pickImages(_that);}
+return pickImages(_that);case _ScheduleNotification():
+return scheduleNotification(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,7 +105,7 @@ return pickImages(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchNoteById value)?  fetchNoteById,TResult? Function( _OnTitleChanged value)?  onTitleChanged,TResult? Function( _OnContentChanged value)?  onContentChanged,TResult? Function( _SaveNote value)?  saveNote,TResult? Function( _PickImages value)?  pickImages,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchNoteById value)?  fetchNoteById,TResult? Function( _OnTitleChanged value)?  onTitleChanged,TResult? Function( _OnContentChanged value)?  onContentChanged,TResult? Function( _SaveNote value)?  saveNote,TResult? Function( _PickImages value)?  pickImages,TResult? Function( _ScheduleNotification value)?  scheduleNotification,}){
 final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
@@ -111,7 +113,8 @@ return fetchNoteById(_that);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that);case _OnContentChanged() when onContentChanged != null:
 return onContentChanged(_that);case _SaveNote() when saveNote != null:
 return saveNote(_that);case _PickImages() when pickImages != null:
-return pickImages(_that);case _:
+return pickImages(_that);case _ScheduleNotification() when scheduleNotification != null:
+return scheduleNotification(_that);case _:
   return null;
 
 }
@@ -128,14 +131,15 @@ return pickImages(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  fetchNoteById,TResult Function( String title)?  onTitleChanged,TResult Function( String content)?  onContentChanged,TResult Function()?  saveNote,TResult Function( List<File> images)?  pickImages,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  fetchNoteById,TResult Function( String title)?  onTitleChanged,TResult Function( String content)?  onContentChanged,TResult Function()?  saveNote,TResult Function( List<File> images)?  pickImages,TResult Function( DateTime dateTime)?  scheduleNotification,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that.id);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that.title);case _OnContentChanged() when onContentChanged != null:
 return onContentChanged(_that.content);case _SaveNote() when saveNote != null:
 return saveNote();case _PickImages() when pickImages != null:
-return pickImages(_that.images);case _:
+return pickImages(_that.images);case _ScheduleNotification() when scheduleNotification != null:
+return scheduleNotification(_that.dateTime);case _:
   return orElse();
 
 }
@@ -153,14 +157,15 @@ return pickImages(_that.images);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  fetchNoteById,required TResult Function( String title)  onTitleChanged,required TResult Function( String content)  onContentChanged,required TResult Function()  saveNote,required TResult Function( List<File> images)  pickImages,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  fetchNoteById,required TResult Function( String title)  onTitleChanged,required TResult Function( String content)  onContentChanged,required TResult Function()  saveNote,required TResult Function( List<File> images)  pickImages,required TResult Function( DateTime dateTime)  scheduleNotification,}) {final _that = this;
 switch (_that) {
 case _FetchNoteById():
 return fetchNoteById(_that.id);case _OnTitleChanged():
 return onTitleChanged(_that.title);case _OnContentChanged():
 return onContentChanged(_that.content);case _SaveNote():
 return saveNote();case _PickImages():
-return pickImages(_that.images);}
+return pickImages(_that.images);case _ScheduleNotification():
+return scheduleNotification(_that.dateTime);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,14 +179,15 @@ return pickImages(_that.images);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  fetchNoteById,TResult? Function( String title)?  onTitleChanged,TResult? Function( String content)?  onContentChanged,TResult? Function()?  saveNote,TResult? Function( List<File> images)?  pickImages,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  fetchNoteById,TResult? Function( String title)?  onTitleChanged,TResult? Function( String content)?  onContentChanged,TResult? Function()?  saveNote,TResult? Function( List<File> images)?  pickImages,TResult? Function( DateTime dateTime)?  scheduleNotification,}) {final _that = this;
 switch (_that) {
 case _FetchNoteById() when fetchNoteById != null:
 return fetchNoteById(_that.id);case _OnTitleChanged() when onTitleChanged != null:
 return onTitleChanged(_that.title);case _OnContentChanged() when onContentChanged != null:
 return onContentChanged(_that.content);case _SaveNote() when saveNote != null:
 return saveNote();case _PickImages() when pickImages != null:
-return pickImages(_that.images);case _:
+return pickImages(_that.images);case _ScheduleNotification() when scheduleNotification != null:
+return scheduleNotification(_that.dateTime);case _:
   return null;
 
 }
@@ -485,6 +491,72 @@ class __$PickImagesCopyWithImpl<$Res>
   return _then(_PickImages(
 null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
 as List<File>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _ScheduleNotification implements EditEvent {
+  const _ScheduleNotification(this.dateTime);
+  
+
+ final  DateTime dateTime;
+
+/// Create a copy of EditEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ScheduleNotificationCopyWith<_ScheduleNotification> get copyWith => __$ScheduleNotificationCopyWithImpl<_ScheduleNotification>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduleNotification&&(identical(other.dateTime, dateTime) || other.dateTime == dateTime));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,dateTime);
+
+@override
+String toString() {
+  return 'EditEvent.scheduleNotification(dateTime: $dateTime)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ScheduleNotificationCopyWith<$Res> implements $EditEventCopyWith<$Res> {
+  factory _$ScheduleNotificationCopyWith(_ScheduleNotification value, $Res Function(_ScheduleNotification) _then) = __$ScheduleNotificationCopyWithImpl;
+@useResult
+$Res call({
+ DateTime dateTime
+});
+
+
+
+
+}
+/// @nodoc
+class __$ScheduleNotificationCopyWithImpl<$Res>
+    implements _$ScheduleNotificationCopyWith<$Res> {
+  __$ScheduleNotificationCopyWithImpl(this._self, this._then);
+
+  final _ScheduleNotification _self;
+  final $Res Function(_ScheduleNotification) _then;
+
+/// Create a copy of EditEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? dateTime = null,}) {
+  return _then(_ScheduleNotification(
+null == dateTime ? _self.dateTime : dateTime // ignore: cast_nullable_to_non_nullable
+as DateTime,
   ));
 }
 
