@@ -229,6 +229,7 @@ class _ListingLayout extends StatelessWidget {
                                             key: ValueKey(item.id),
                                             title: item.title,
                                             content: item.content,
+                                            images: item.imagePaths,
                                             onCardLongPress: () =>
                                                 _deleteNoteDialogBuilder(
                                                   context,
@@ -258,6 +259,7 @@ class _ListingLayout extends StatelessWidget {
                                         key: ValueKey(item.id),
                                         title: item.title,
                                         content: item.content,
+                                        images: item.imagePaths,
                                         onCardLongPress: () =>
                                             _deleteNoteDialogBuilder(
                                               context,
