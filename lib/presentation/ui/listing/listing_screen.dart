@@ -2,7 +2,6 @@ import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keep_note/domain/note/model/display_mode.dart';
@@ -335,7 +334,7 @@ class _ListingLayout extends StatelessWidget {
     );
   }
 
-  Future<void> _navigateAndRefresh(BuildContext context, int? id) async {
+  Future<void> _navigateAndRefresh(BuildContext context, String? id) async {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen.
     if (id != null) {

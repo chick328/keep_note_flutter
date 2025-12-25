@@ -9,13 +9,21 @@ abstract class NoteEntity with _$NoteEntity {
   const NoteEntity._();
 
   const factory NoteEntity({
-    required int id,
+    required String id,
     String? title,
     String? content,
     List<String>? imagePaths,
-    required DateTime createDate,
+    int? scheduledNotificationId,
+    DateTime? scheduledNotificationDateTime,
     required DateTime lastModifyDate,
   }) = _NoteEntity;
 
-  Note toNote() => Note(id: id, title: title, content: content, imagePaths: imagePaths);
+  Note toNote() => Note(
+    id: id,
+    title: title,
+    content: content,
+    imagePaths: imagePaths,
+    scheduledNotificationId: scheduledNotificationId,
+    scheduledNotificationDateTime: scheduledNotificationDateTime,
+  );
 }

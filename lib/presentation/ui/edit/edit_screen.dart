@@ -13,17 +13,14 @@ import '../common/gesture/dismiss_keyboard.dart';
 class EditScreen extends StatelessWidget {
   const EditScreen({super.key, this.id});
 
-  final int? id;
+  final String? id;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
-        final bloc = GetIt.instance<EditBloc>();
-        if (id != null) {
-          bloc.add(EditEvent.fetchNoteById(id!));
-        }
-        return bloc;
+        return GetIt.instance<EditBloc>()
+          ..add(EditEvent.fetchNoteById(id));
       },
       child: _EditLayout(),
     );
@@ -62,22 +59,29 @@ class _EditLayout extends StatelessWidget {
                 },
               ),
               actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.notifications_active),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _scheduleNotificationDialogBuilder(
+                  IconButton(
+                    onPressed: () {
+                      _scheduleNotificationDialogBuilder(
                         context,
-                      initialDateTime: state.note.scheduledNotificationDateTime,
-                      onConfirm: (dateTime) {
-                        context.read<EditBloc>().add(EditEvent.scheduleNotification(dateTime));
-                      }
-                    );
-                  },
-                  icon: Icon(Icons.notifications_outlined),
-                ),
+                        scheduledDateTime: state.note
+                            .scheduledNotificationDateTime,
+                        onConfirm: (dateTime) {
+                          context.read<EditBloc>().add(
+                            EditEvent.scheduleNotification(dateTime),
+                          );
+                        },
+                        onCancel: () {
+                          context.read<EditBloc>().add(
+                            EditEvent.cancelScheduledNotification(),
+                          );
+                        }
+                      );
+                    },
+                    icon: state.note.scheduledNotificationId != null &&
+                        state.note.scheduledNotificationDateTime != null
+                        ? Icon(Icons.notifications_active) : Icon(
+                        Icons.notifications_outlined),
+                  ),
                 IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
               ],
             ),
@@ -93,7 +97,10 @@ class _EditLayout extends StatelessWidget {
                     autofocus: true,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
-                    style: Theme.of(context).textTheme.headlineLarge,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headlineLarge,
                     decoration: InputDecoration.collapsed(
                       hintText: "Title",
                       border: InputBorder.none,
@@ -113,12 +120,15 @@ class _EditLayout extends StatelessWidget {
                     ),
                     child: TextField(
                       controller:
-                          TextEditingController(text: state.note.content)
-                            ..selection = TextSelection.collapsed(
-                              offset: state.note.content?.length ?? 0,
-                            ),
+                      TextEditingController(text: state.note.content)
+                        ..selection = TextSelection.collapsed(
+                          offset: state.note.content?.length ?? 0,
+                        ),
                       maxLines: null,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,
                       keyboardType: TextInputType.multiline,
                       decoration: InputDecoration.collapsed(
                         hintText: "Content",
@@ -150,7 +160,7 @@ class _EditLayout extends StatelessWidget {
                             spacing: 8.0,
                             children: [
                               for (String imagePath
-                                  in state.note.imagePaths ?? [])
+                              in state.note.imagePaths ?? [])
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(16.0),
                                   child: Image.file(
@@ -231,13 +241,25 @@ class _EditLayout extends StatelessWidget {
     );
   }
 
-  Future<void> _scheduleNotificationDialogBuilder(
-    BuildContext parentContext, {
-    DateTime? initialDateTime,
+  Future<void> _scheduleNotificationDialogBuilder(BuildContext parentContext, {
+    DateTime? scheduledDateTime,
     Function(DateTime dateTime)? onConfirm,
+    Function()? onCancel,
   }) {
     final currentDateTime = DateTime.now();
-    DateTime selectedDateTime = currentDateTime.add(const Duration(hours: 1));
+    DateTime initialDateTime;
+
+    if (scheduledDateTime!= null) {
+      if (scheduledDateTime.isBefore(currentDateTime)) {
+        initialDateTime = currentDateTime.add(const Duration(hours: 1));
+      } else {
+        initialDateTime = scheduledDateTime;
+      }
+    } else {
+      initialDateTime = currentDateTime.add(const Duration(hours: 1));
+    }
+
+    DateTime selectedDateTime = initialDateTime;
 
     return showDialog<void>(
       context: parentContext,
@@ -256,26 +278,25 @@ class _EditLayout extends StatelessWidget {
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    child:Text(
+                    child: Text(
                       "Schedule Notification",
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headlineMedium,
                       textAlign: TextAlign.left,
                     ),
                   ),
                   Flexible(
                     child: CupertinoDatePicker(
                       mode: CupertinoDatePickerMode.dateAndTime,
-                      initialDateTime:
-                          initialDateTime ??
-                          currentDateTime.add(const Duration(hours: 1)),
+                      initialDateTime: initialDateTime,
                       minimumDate: currentDateTime,
                       maximumDate: currentDateTime.add(
                         const Duration(days: 365),
                       ),
                       use24hFormat: true,
                       onDateTimeChanged: (DateTime newDateTime) {
-                        // Handle the new date/time here
-                        print("$newDateTime");
                         selectedDateTime = newDateTime;
                       },
                     ),
@@ -285,21 +306,41 @@ class _EditLayout extends StatelessWidget {
                     children: [
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: Theme.of(context).textTheme.labelLarge,
+                          textStyle: Theme
+                              .of(context)
+                              .textTheme
+                              .labelLarge,
                         ),
                         child: const Text('Cancel'),
+                        onPressed: () {
+                          onCancel?.call();
+                          context.pop();
+                        },
+                      ),
+                      Expanded(child: SizedBox.shrink()),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme
+                              .of(context)
+                              .textTheme
+                              .labelLarge,
+                        ),
+                        child: const Text('Back'),
                         onPressed: () {
                           context.pop();
                         },
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: Theme.of(context).textTheme.labelLarge,
+                          textStyle: Theme
+                              .of(context)
+                              .textTheme
+                              .labelLarge,
                         ),
                         child: const Text('Confirm'),
                         onPressed: () {
-                            onConfirm?.call(selectedDateTime);
-                            context.pop();
+                          onConfirm?.call(selectedDateTime);
+                          context.pop();
                         },
                       ),
                     ],

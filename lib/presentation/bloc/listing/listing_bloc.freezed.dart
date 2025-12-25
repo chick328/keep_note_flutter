@@ -797,7 +797,7 @@ String toString() {
 /// @nodoc
 mixin _$ListingState {
 
- List<Note> get searchResult; String get searchKeyword; DisplayMode get displayMode; AppPagingState<Note>? get notePagingState; set notePagingState(AppPagingState<Note>? value); bool get isSearchFailure; bool get isDeleteNoteSuccess; bool get isDeleteNoteFailure;
+ List<Note> get searchResult; String get searchKeyword; DisplayMode get displayMode; AppPagingState<Note> get notePagingState; set notePagingState(AppPagingState<Note> value); bool get isSearchFailure; bool get isDeleteNoteSuccess; bool get isDeleteNoteFailure;
 /// Create a copy of ListingState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -828,7 +828,7 @@ abstract mixin class $ListingStateCopyWith<$Res>  {
   factory $ListingStateCopyWith(ListingState value, $Res Function(ListingState) _then) = _$ListingStateCopyWithImpl;
 @useResult
 $Res call({
- List<Note> searchResult, String searchKeyword, DisplayMode displayMode, bool isSearchFailure, bool isDeleteNoteSuccess, bool isDeleteNoteFailure, dynamic notePagingState
+ List<Note> searchResult, String searchKeyword, DisplayMode displayMode, bool isSearchFailure, bool isDeleteNoteSuccess, bool isDeleteNoteFailure, AppPagingState<Note>? notePagingState
 });
 
 
@@ -854,7 +854,7 @@ as DisplayMode,isSearchFailure: null == isSearchFailure ? _self.isSearchFailure 
 as bool,isDeleteNoteSuccess: null == isDeleteNoteSuccess ? _self.isDeleteNoteSuccess : isDeleteNoteSuccess // ignore: cast_nullable_to_non_nullable
 as bool,isDeleteNoteFailure: null == isDeleteNoteFailure ? _self.isDeleteNoteFailure : isDeleteNoteFailure // ignore: cast_nullable_to_non_nullable
 as bool,notePagingState: freezed == notePagingState ? _self.notePagingState! : notePagingState // ignore: cast_nullable_to_non_nullable
-as dynamic,
+as AppPagingState<Note>?,
   ));
 }
 

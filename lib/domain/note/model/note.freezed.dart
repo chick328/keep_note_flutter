@@ -12,9 +12,9 @@ part of 'note.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$Note implements DiagnosticableTreeMixin {
+mixin _$Note {
 
- int? get id; String? get title; String? get content; List<String>? get imagePaths; DateTime? get scheduledNotificationDateTime;
+ String get id; String? get title; String? get content; List<String>? get imagePaths; int? get scheduledNotificationId; DateTime? get scheduledNotificationDateTime;
 /// Create a copy of Note
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -22,25 +22,19 @@ mixin _$Note implements DiagnosticableTreeMixin {
 $NoteCopyWith<Note> get copyWith => _$NoteCopyWithImpl<Note>(this as Note, _$identity);
 
 
-@override
-void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-    ..add(DiagnosticsProperty('type', 'Note'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('title', title))..add(DiagnosticsProperty('content', content))..add(DiagnosticsProperty('imagePaths', imagePaths))..add(DiagnosticsProperty('scheduledNotificationDateTime', scheduledNotificationDateTime));
-}
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Note&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&const DeepCollectionEquality().equals(other.imagePaths, imagePaths)&&(identical(other.scheduledNotificationDateTime, scheduledNotificationDateTime) || other.scheduledNotificationDateTime == scheduledNotificationDateTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Note&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&const DeepCollectionEquality().equals(other.imagePaths, imagePaths)&&(identical(other.scheduledNotificationId, scheduledNotificationId) || other.scheduledNotificationId == scheduledNotificationId)&&(identical(other.scheduledNotificationDateTime, scheduledNotificationDateTime) || other.scheduledNotificationDateTime == scheduledNotificationDateTime));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,content,const DeepCollectionEquality().hash(imagePaths),scheduledNotificationDateTime);
+int get hashCode => Object.hash(runtimeType,id,title,content,const DeepCollectionEquality().hash(imagePaths),scheduledNotificationId,scheduledNotificationDateTime);
 
 @override
-String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'Note(id: $id, title: $title, content: $content, imagePaths: $imagePaths, scheduledNotificationDateTime: $scheduledNotificationDateTime)';
+String toString() {
+  return 'Note(id: $id, title: $title, content: $content, imagePaths: $imagePaths, scheduledNotificationId: $scheduledNotificationId, scheduledNotificationDateTime: $scheduledNotificationDateTime)';
 }
 
 
@@ -51,7 +45,7 @@ abstract mixin class $NoteCopyWith<$Res>  {
   factory $NoteCopyWith(Note value, $Res Function(Note) _then) = _$NoteCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? title, String? content, List<String>? imagePaths, DateTime? scheduledNotificationDateTime
+ String? id, String? title, String? content, List<String>? imagePaths, int? scheduledNotificationId, DateTime? scheduledNotificationDateTime
 });
 
 
@@ -68,13 +62,14 @@ class _$NoteCopyWithImpl<$Res>
 
 /// Create a copy of Note
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? title = freezed,Object? content = freezed,Object? imagePaths = freezed,Object? scheduledNotificationDateTime = freezed,}) {
-  return _then(_self.copyWith(
-id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? title = freezed,Object? content = freezed,Object? imagePaths = freezed,Object? scheduledNotificationId = freezed,Object? scheduledNotificationDateTime = freezed,}) {
+  return _then(Note(
+id: freezed == id ? _self.id! : id // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String?,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String?,imagePaths: freezed == imagePaths ? _self.imagePaths : imagePaths // ignore: cast_nullable_to_non_nullable
-as List<String>?,scheduledNotificationDateTime: freezed == scheduledNotificationDateTime ? _self.scheduledNotificationDateTime : scheduledNotificationDateTime // ignore: cast_nullable_to_non_nullable
+as List<String>?,scheduledNotificationId: freezed == scheduledNotificationId ? _self.scheduledNotificationId : scheduledNotificationId // ignore: cast_nullable_to_non_nullable
+as int?,scheduledNotificationDateTime: freezed == scheduledNotificationDateTime ? _self.scheduledNotificationDateTime : scheduledNotificationDateTime // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -96,11 +91,10 @@ extension NotePatterns on Note {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Note value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Note() when $default != null:
-return $default(_that);case _:
+case _:
   return orElse();
 
 }
@@ -118,11 +112,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Note value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _Note():
-return $default(_that);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -139,11 +132,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Note value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _Note() when $default != null:
-return $default(_that);case _:
+case _:
   return null;
 
 }
@@ -160,10 +152,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? title,  String? content,  List<String>? imagePaths,  DateTime? scheduledNotificationDateTime)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Note() when $default != null:
-return $default(_that.id,_that.title,_that.content,_that.imagePaths,_that.scheduledNotificationDateTime);case _:
+case _:
   return orElse();
 
 }
@@ -181,10 +172,9 @@ return $default(_that.id,_that.title,_that.content,_that.imagePaths,_that.schedu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? title,  String? content,  List<String>? imagePaths,  DateTime? scheduledNotificationDateTime)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _Note():
-return $default(_that.id,_that.title,_that.content,_that.imagePaths,_that.scheduledNotificationDateTime);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,102 +191,13 @@ return $default(_that.id,_that.title,_that.content,_that.imagePaths,_that.schedu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? title,  String? content,  List<String>? imagePaths,  DateTime? scheduledNotificationDateTime)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _Note() when $default != null:
-return $default(_that.id,_that.title,_that.content,_that.imagePaths,_that.scheduledNotificationDateTime);case _:
+case _:
   return null;
 
 }
 }
-
-}
-
-/// @nodoc
-
-
-class _Note extends Note with DiagnosticableTreeMixin {
-  const _Note({this.id, this.title, this.content, final  List<String>? imagePaths, this.scheduledNotificationDateTime}): _imagePaths = imagePaths,super._();
-  
-
-@override final  int? id;
-@override final  String? title;
-@override final  String? content;
- final  List<String>? _imagePaths;
-@override List<String>? get imagePaths {
-  final value = _imagePaths;
-  if (value == null) return null;
-  if (_imagePaths is EqualUnmodifiableListView) return _imagePaths;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(value);
-}
-
-@override final  DateTime? scheduledNotificationDateTime;
-
-/// Create a copy of Note
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$NoteCopyWith<_Note> get copyWith => __$NoteCopyWithImpl<_Note>(this, _$identity);
-
-
-@override
-void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-    ..add(DiagnosticsProperty('type', 'Note'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('title', title))..add(DiagnosticsProperty('content', content))..add(DiagnosticsProperty('imagePaths', imagePaths))..add(DiagnosticsProperty('scheduledNotificationDateTime', scheduledNotificationDateTime));
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Note&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&const DeepCollectionEquality().equals(other._imagePaths, _imagePaths)&&(identical(other.scheduledNotificationDateTime, scheduledNotificationDateTime) || other.scheduledNotificationDateTime == scheduledNotificationDateTime));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,id,title,content,const DeepCollectionEquality().hash(_imagePaths),scheduledNotificationDateTime);
-
-@override
-String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'Note(id: $id, title: $title, content: $content, imagePaths: $imagePaths, scheduledNotificationDateTime: $scheduledNotificationDateTime)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$NoteCopyWith<$Res> implements $NoteCopyWith<$Res> {
-  factory _$NoteCopyWith(_Note value, $Res Function(_Note) _then) = __$NoteCopyWithImpl;
-@override @useResult
-$Res call({
- int? id, String? title, String? content, List<String>? imagePaths, DateTime? scheduledNotificationDateTime
-});
-
-
-
-
-}
-/// @nodoc
-class __$NoteCopyWithImpl<$Res>
-    implements _$NoteCopyWith<$Res> {
-  __$NoteCopyWithImpl(this._self, this._then);
-
-  final _Note _self;
-  final $Res Function(_Note) _then;
-
-/// Create a copy of Note
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? title = freezed,Object? content = freezed,Object? imagePaths = freezed,Object? scheduledNotificationDateTime = freezed,}) {
-  return _then(_Note(
-id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String?,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String?,imagePaths: freezed == imagePaths ? _self._imagePaths : imagePaths // ignore: cast_nullable_to_non_nullable
-as List<String>?,scheduledNotificationDateTime: freezed == scheduledNotificationDateTime ? _self.scheduledNotificationDateTime : scheduledNotificationDateTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,
-  ));
-}
-
 
 }
 

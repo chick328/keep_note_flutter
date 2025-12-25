@@ -10,6 +10,10 @@ void configureBlocModuleDependencies() {
     () => ListingBloc(noteRepository: locator(), sharedPrefManager: locator()),
   );
   locator.registerFactory<EditBloc>(
-    () => EditBloc(noteRepository: locator(), saveNoteImageUseCase: locator()),
+    () => EditBloc(
+      noteRepository: locator(),
+      saveNoteImageUseCase: locator(),
+      scheduleNoteNotificationUseCase: locator(),
+    ),
   );
 }

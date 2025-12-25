@@ -18,7 +18,7 @@ final route = GoRouter(
         GoRoute(
           path: ':id',
           builder: (context, state) {
-            final id = int.parse(state.pathParameters['id']!);
+            final id = state.pathParameters['id']!;
             return EditScreen(id: id);
           },
         ),

@@ -9,7 +9,7 @@ class ListingState with _$ListingState {
     this.isSearchFailure = false,
     this.isDeleteNoteSuccess = false,
     this.isDeleteNoteFailure = false,
-    notePagingState,
+    AppPagingState<Note>? notePagingState,
   }) : notePagingState = (notePagingState ?? AppPagingState<Note>().copyWith());
 
   @override
@@ -22,7 +22,7 @@ class ListingState with _$ListingState {
   final DisplayMode displayMode;
 
   @override
-  AppPagingState<Note>? notePagingState;
+  AppPagingState<Note> notePagingState;
 
   @override
   final bool isSearchFailure;

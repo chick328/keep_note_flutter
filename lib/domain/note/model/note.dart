@@ -1,18 +1,34 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
-import 'package:keep_note/data/note/model/note_entity.dart';
+import 'package:uuid/uuid.dart';
 
 part 'note.freezed.dart';
 
 @freezed
-abstract class Note with _$Note {
-  const Note._();
+class Note with _$Note {
+  Note({
+    String? id,
+    this.title,
+    this.content,
+    this.imagePaths,
+    this.scheduledNotificationId,
+    this.scheduledNotificationDateTime,
+  }) : id = id ?? Uuid().v4();
 
-  const factory Note({
-    int? id,
-    String? title,
-    String? content,
-    List<String>? imagePaths,
-    DateTime? scheduledNotificationDateTime
-  }) = _Note;
+  @override
+  final String id;
+
+  @override
+  final String? title;
+
+  @override
+  final String? content;
+
+  @override
+  final List<String>? imagePaths;
+
+  @override
+  final int? scheduledNotificationId;
+
+  @override
+  final DateTime? scheduledNotificationDateTime;
 }

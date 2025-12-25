@@ -16,7 +16,7 @@ class NoteRepositoryImpl extends NoteRepository {
         await _database.open();
       }
 
-      await _database.noteDao?.insert(note);
+      await _database.noteDao?.insertOrUpdate(note);
       return Result.success(null);
     } on Exception catch (e) {
       return Result.error(e);
@@ -80,7 +80,7 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Future<Result<Note>> getNoteById(int id) async {
+  Future<Result<Note>> getNoteById(String id) async {
     try {
       if (!_database.isOpen()) {
         await _database.open();
@@ -99,12 +99,8 @@ class NoteRepositoryImpl extends NoteRepository {
       if (!_database.isOpen()) {
         await _database.open();
       }
+      await _database.noteDao?.insertOrUpdate(note);
 
-      if (note.id == null) {
-        await _database.noteDao?.insert(note);
-      } else {
-        await _database.noteDao?.update(note);
-      }
       return Result.success(null);
     } on Exception catch (e) {
       return Result.error(e);

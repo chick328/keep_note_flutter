@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:keep_note/presentation/ui/common/theme/app_typography.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'config/di/bloc_module.dart';
 import 'config/di/data_module.dart';
 import 'config/di/domain_module.dart';
@@ -16,14 +19,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  final androidNotiSetting = AndroidInitializationSettings(
-    '@mipmap/ic_launcher',
-  );
-  final iosNotiSetting = DarwinInitializationSettings();
-
   final InitializationSettings initializationSettings = InitializationSettings(
-    android: androidNotiSetting,
-    iOS: iosNotiSetting,
+    android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    iOS: DarwinInitializationSettings(),
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
@@ -32,6 +30,11 @@ Future<void> main() async {
         AndroidFlutterLocalNotificationsPlugin
       >()
       ?.requestNotificationsPermission();
+
+  // init timezone info for schedule noti
+  final TimezoneInfo currentTimeZone = await FlutterTimezone.getLocalTimezone();
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation(currentTimeZone.identifier));
 
   runApp(const MyApp());
 }
