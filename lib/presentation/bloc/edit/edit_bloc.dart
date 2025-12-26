@@ -53,13 +53,9 @@ class EditBloc extends Bloc<EditEvent, EditState>
         saveNote: (_) async {
           final currentNote = state.note;
           if (currentNote.title != null || currentNote.content != null) {
-            final result = await _noteRepository.insertOrUpdateNote(
+            await _noteRepository.insertOrUpdateNote(
               currentNote,
             );
-            switch (result) {
-              case Success<void>():
-              case Error():
-            }
           }
         },
         pickImages: (event) async {
@@ -67,8 +63,7 @@ class EditBloc extends Bloc<EditEvent, EditState>
             event.images.first,
             state.note,
           );
-          switch (result) {
-            case Success<String>():
+          if (result is Success<String>) {
               emit(
                 state.copyWith(
                   note: state.note.copyWith(
@@ -76,7 +71,6 @@ class EditBloc extends Bloc<EditEvent, EditState>
                   ),
                 ),
               );
-            case Error():
           }
         },
         scheduleNotification: (event) async {
@@ -84,21 +78,25 @@ class EditBloc extends Bloc<EditEvent, EditState>
             event.dateTime,
             state.note,
           );
-          switch (result) {
-            case Success<Note>():
+          if (result is Success<Note>) {
               emit(state.copyWith(note: result.value));
-            case Error():
           }
         },
         cancelScheduledNotification: (_) async {
           final result = await _scheduleNoteNotificationUseCase.cancel(
             state.note,
           );
-          print(result);
+          if (result is Success<Note>) {
+            emit(state.copyWith(note: result.value));
+          }
+        },
+        deleteNote: (_) async {
+          final result = await _noteRepository.deleteNote(state.note);
           switch (result) {
-            case Success<Note>():
-              emit(state.copyWith(note: result.value));
+            case Success<void>():
+              emitPresentation(EditPresentationEvent.deleteNoteSuccess());
             case Error():
+              emitPresentation(EditPresentationEvent.deleteNoteFailure());
           }
         },
       );

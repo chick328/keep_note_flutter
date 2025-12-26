@@ -32,7 +32,6 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
           final result = await _noteRepository.getAllNotes(
             searchKeyword: event.keyword,
           );
-          print("$result");
           switch (result) {
             case Success<List<Note>>():
               emit(
@@ -49,6 +48,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
                 ),
               );
           }
+          emitPresentation(ListingPresentationEvent.onSearchResultUpdated());
         },
         refresh: (_) async {
           await refreshNotesPaginated(emit);
@@ -65,9 +65,6 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
         },
         fetchNotesPagingNext: (event) async {
           await fetchNotesPaginated(emit);
-        },
-        onSearchKeywordChanged: (event) {
-          emit(state.copyWith(searchKeyword: event.keyword));
         },
         onDisplayModeSelected: (event) {
           if (event.mode == state.displayMode) return;
@@ -89,9 +86,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
 
   Future<void> fetchNotesPaginated(Emitter<ListingState> emit) async {
     final currentPagingState = state.notePagingState;
-    if (currentPagingState == null ||
-        currentPagingState.isLoading ||
-        !currentPagingState.hasNextPage) {
+    if (currentPagingState.isLoading || !currentPagingState.hasNextPage) {
       return;
     }
 
@@ -115,13 +110,6 @@ class ListingBloc extends Bloc<ListingEvent, ListingState>
         ),
       ),
     );
-
-    // if (pageKey != 1 && currentPagingState.error ==null) {
-    //   return emit(state.copyWith(notePagingState: currentPagingState.copyWith(
-    //     isLoading: false,
-    //     error: Exception("tstetest"),
-    //   ),));
-    // }
 
     final result = await _noteRepository.getNotesPaginated(20, pageKey);
     final newPagingState = switch (result) {

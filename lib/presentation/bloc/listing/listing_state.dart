@@ -4,7 +4,6 @@ part of 'listing_bloc.dart';
 class ListingState with _$ListingState {
   ListingState({
     this.searchResult = const [],
-    this.searchKeyword = "",
     this.displayMode = DisplayMode.MasonryGrid,
     this.isSearchFailure = false,
     this.isDeleteNoteSuccess = false,
@@ -14,9 +13,6 @@ class ListingState with _$ListingState {
 
   @override
   final List<Note> searchResult;
-
-  @override
-  final String searchKeyword;
 
   @override
   final DisplayMode displayMode;

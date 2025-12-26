@@ -28,12 +28,34 @@ class ListingScreen extends StatelessWidget {
   }
 }
 
-class _ListingLayout extends StatelessWidget {
+class _ListingLayout extends StatefulWidget {
   const _ListingLayout({super.key});
 
   @override
+  State<_ListingLayout> createState() => _ListingLayoutState();
+}
+
+class _ListingLayoutState extends State<_ListingLayout> {
+  @override
   Widget build(BuildContext context) {
     final windowWidth = MediaQuery.sizeOf(context).width;
+
+    var searchController = SearchController();
+
+    @override
+    void dispose() {
+      searchController.dispose();
+      super.dispose();
+    }
+
+    // workaround to force update the suggestion builder for search anchor
+    // changing the text is the only condition that can trigger the suggestionsBuilder
+    // https://stackoverflow.com/a/78674133
+    void forceSuggestionsUpdate() {
+      final currentText = searchController.text;
+      searchController.text = '$currentText\u200B';
+      searchController.text = currentText;
+    }
 
     return BlocPresentationListener<ListingBloc, ListingPresentationEvent>(
       listener: (context, event) {
@@ -46,6 +68,8 @@ class _ListingLayout extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(content: Text('Delete Failure')));
+          case OnSearchResultUpdated():
+            forceSuggestionsUpdate();
         }
       },
       child: BlocBuilder<ListingBloc, ListingState>(
@@ -62,232 +86,216 @@ class _ListingLayout extends StatelessWidget {
             body: DismissKeyboard(
               child: SafeArea(
                 bottom: false,
-                child: state.notePagingState != null
-                    ? CustomScrollView(
-                        slivers: [
-                          SliverPersistentHeader(
-                            pinned: true,
-                            delegate: AppSliverPersistentHeader(
-                              height: 72.0,
-                              widget: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 8.0,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      child: SearchAnchor(
-                                        textInputAction: TextInputAction.search,
-                                        viewOnSubmitted: (v) {
-                                          if (v.trim().isEmpty) return;
-                                          context.read<ListingBloc>().add(
-                                            ListingEvent.searchNotes(v),
-                                          );
-                                        },
-                                        builder:
-                                            (
-                                              BuildContext context,
-                                              SearchController controller,
-                                            ) {
-                                              return InkWell(
-                                                child: Container(
-                                                  padding: const EdgeInsets.all(
-                                                    16.0,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .surfaceContainerHigh,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          40,
-                                                        ),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(Icons.search),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsetsGeometry.symmetric(
-                                                              horizontal: 8.0,
-                                                            ),
-                                                        child: Text("Search"),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: AppSliverPersistentHeader(
+                        height: 72.0,
+                        widget: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
+                          ),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: SearchAnchor(
+                                  searchController: searchController,
+                                  textInputAction: TextInputAction.search,
+                                  viewOnSubmitted: (v) {
+                                    if (v.trim().isEmpty) return;
+                                    context.read<ListingBloc>().add(
+                                      ListingEvent.searchNotes(v),
+                                    );
+                                  },
+                                  builder:
+                                      (
+                                        BuildContext context,
+                                        SearchController controller,
+                                      ) {
+                                        return InkWell(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(16.0),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .surfaceContainerHigh,
+                                              borderRadius:
+                                                  BorderRadius.circular(40),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.search),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsetsGeometry.symmetric(
+                                                        horizontal: 8.0,
                                                       ),
-                                                    ],
-                                                  ),
+                                                  child: Text("Search"),
                                                 ),
-                                              );
-                                            },
-                                        suggestionsBuilder:
-                                            (
-                                              BuildContext context,
-                                              SearchController controller,
-                                            ) {
-                                              return [];
-                                            },
-                                      ),
-                                    ),
-                                    PopupMenuButton<DisplayMode>(
-                                      initialValue: state.displayMode,
-                                      onSelected: (DisplayMode mode) {
-                                        context.read<ListingBloc>().add(
-                                          ListingEvent.onDisplayModeSelected(
-                                            mode,
+                                              ],
+                                            ),
                                           ),
                                         );
                                       },
-                                      icon: switch (state.displayMode) {
-                                        DisplayMode.MasonryGrid => Icon(
-                                          Icons.grid_view,
-                                        ),
-                                        DisplayMode.List => Icon(
-                                          Icons.view_agenda_outlined,
-                                        ),
+                                  suggestionsBuilder: (_, _) {
+                                    final searchResult = context
+                                        .read<ListingBloc>()
+                                        .state
+                                        .searchResult;
+                                    return List<ListTile>.generate(
+                                      searchResult.length,
+                                      (int index) {
+                                        final item = searchResult[index];
+                                        return ListTile(
+                                          title: Text(
+                                            item.content ?? "",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          subtitle: Text(
+                                            item.title ?? "",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          onTap: () => _navigateAndRefresh(
+                                            context,
+                                            item.id,
+                                          ),
+                                        );
                                       },
-                                      itemBuilder: (BuildContext context) {
-                                        return DisplayMode.values.map((mode) {
-                                          return switch (mode) {
-                                            DisplayMode.MasonryGrid =>
-                                              PopupMenuItem<DisplayMode>(
-                                                value: DisplayMode.MasonryGrid,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.grid_view),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsGeometry.symmetric(
-                                                            horizontal: 4.0,
-                                                          ),
-                                                      child: Text('Grid'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            DisplayMode.List =>
-                                              PopupMenuItem<DisplayMode>(
-                                                value: DisplayMode.List,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .view_agenda_outlined,
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsGeometry.symmetric(
-                                                            horizontal: 4.0,
-                                                          ),
-                                                      child: Text('List'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                          };
-                                        }).toList();
-                                      },
-                                    ),
-                                  ],
+                                    );
+                                  },
                                 ),
                               ),
-                            ),
-                          ),
-                          CupertinoSliverRefreshControl(
-                            onRefresh: () async {
-                              context.read<ListingBloc>().add(
-                                ListingEvent.refresh(),
-                              );
-                            },
-                          ),
-                          SliverSafeArea(
-                            bottom: true,
-                            minimum: EdgeInsets.zero,
-                            sliver: SliverPadding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              sliver: switch (state.displayMode) {
-                                DisplayMode.MasonryGrid =>
-                                  AppPagingSliverMasonryGrid<Note>(
-                                    state: state.notePagingState!,
-                                    mainAxisSpacing: 4,
-                                    crossAxisSpacing: 4,
-                                    maxCrossAxisExtent: windowWidth / 2,
-                                    onFetchNextPage: () {
-                                      context.read<ListingBloc>().add(
-                                        ListingEvent.fetchNotesPagingNext(),
-                                      );
-                                    },
-                                    onRetry: () {
-                                      context.read<ListingBloc>().add(
-                                        ListingEvent.fetchNotesPagingNext(),
-                                      );
-                                    },
-                                    itemContent: (context, item, index) =>
-                                        GridPreviewCard(
-                                          key: ValueKey(item.id),
-                                          title: item.title,
-                                          content: item.content,
-                                          images: item.imagePaths,
-                                          onCardLongPress: () =>
-                                              _deleteNoteDialogBuilder(
-                                                context,
-                                                item,
-                                              ),
-                                          onCardClick: () =>
-                                              _navigateAndRefresh(
-                                                context,
-                                                item.id,
-                                              ),
-                                        ),
+                              PopupMenuButton<DisplayMode>(
+                                initialValue: state.displayMode,
+                                onSelected: (DisplayMode mode) {
+                                  context.read<ListingBloc>().add(
+                                    ListingEvent.onDisplayModeSelected(mode),
+                                  );
+                                },
+                                icon: switch (state.displayMode) {
+                                  DisplayMode.MasonryGrid => Icon(
+                                    Icons.grid_view,
                                   ),
-                                DisplayMode.List => AppPagingSliverList<Note>(
-                                  state: state.notePagingState!,
-                                  onFetchNextPage: () {
-                                    context.read<ListingBloc>().add(
-                                      ListingEvent.fetchNotesPagingNext(),
-                                    );
-                                  },
-                                  onRetry: () {
-                                    context.read<ListingBloc>().add(
-                                      ListingEvent.fetchNotesPagingNext(),
-                                    );
-                                  },
-                                  itemContent: (context, item, index) =>
-                                      ListPreviewCard(
-                                        key: ValueKey(item.id),
-                                        title: item.title,
-                                        content: item.content,
-                                        images: item.imagePaths,
-                                        onCardLongPress: () =>
-                                            _deleteNoteDialogBuilder(
-                                              context,
-                                              item,
-                                            ),
-                                        onCardClick: () => _navigateAndRefresh(
-                                          context,
-                                          item.id,
+                                  DisplayMode.List => Icon(
+                                    Icons.view_agenda_outlined,
+                                  ),
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return DisplayMode.values.map((mode) {
+                                    return switch (mode) {
+                                      DisplayMode.MasonryGrid =>
+                                        PopupMenuItem<DisplayMode>(
+                                          value: DisplayMode.MasonryGrid,
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.grid_view),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsetsGeometry.symmetric(
+                                                      horizontal: 4.0,
+                                                    ),
+                                                child: Text('Grid'),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                ),
-                              },
-                            ),
+                                      DisplayMode.List =>
+                                        PopupMenuItem<DisplayMode>(
+                                          value: DisplayMode.List,
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.view_agenda_outlined),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsetsGeometry.symmetric(
+                                                      horizontal: 4.0,
+                                                    ),
+                                                child: Text('List'),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                    };
+                                  }).toList();
+                                },
+                              ),
+                            ],
                           ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Text("something went wrong"),
-                          TextButton(
-                            onPressed: () {
+                        ),
+                      ),
+                    ),
+                    CupertinoSliverRefreshControl(
+                      onRefresh: () async {
+                        context.read<ListingBloc>().add(ListingEvent.refresh());
+                      },
+                    ),
+                    SliverSafeArea(
+                      bottom: true,
+                      minimum: EdgeInsets.zero,
+                      sliver: SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: switch (state.displayMode) {
+                          DisplayMode.MasonryGrid =>
+                            AppPagingSliverMasonryGrid<Note>(
+                              state: state.notePagingState,
+                              mainAxisSpacing: 4,
+                              crossAxisSpacing: 4,
+                              maxCrossAxisExtent: windowWidth / 2,
+                              onFetchNextPage: () {
+                                context.read<ListingBloc>().add(
+                                  ListingEvent.fetchNotesPagingNext(),
+                                );
+                              },
+                              onRetry: () {
+                                context.read<ListingBloc>().add(
+                                  ListingEvent.fetchNotesPagingNext(),
+                                );
+                              },
+                              itemContent: (context, item, index) =>
+                                  GridPreviewCard(
+                                    key: ValueKey(item.id),
+                                    title: item.title,
+                                    content: item.content,
+                                    images: item.imagePaths,
+                                    onCardLongPress: () =>
+                                        _deleteNoteDialogBuilder(context, item),
+                                    onCardClick: () =>
+                                        _navigateAndRefresh(context, item.id),
+                                  ),
+                            ),
+                          DisplayMode.List => AppPagingSliverList<Note>(
+                            state: state.notePagingState,
+                            onFetchNextPage: () {
                               context.read<ListingBloc>().add(
-                                ListingEvent.refresh(),
+                                ListingEvent.fetchNotesPagingNext(),
                               );
                             },
-                            child: Text("Retry"),
+                            onRetry: () {
+                              context.read<ListingBloc>().add(
+                                ListingEvent.fetchNotesPagingNext(),
+                              );
+                            },
+                            itemContent: (context, item, index) =>
+                                ListPreviewCard(
+                                  key: ValueKey(item.id),
+                                  title: item.title,
+                                  content: item.content,
+                                  images: item.imagePaths,
+                                  onCardLongPress: () =>
+                                      _deleteNoteDialogBuilder(context, item),
+                                  onCardClick: () =>
+                                      _navigateAndRefresh(context, item.id),
+                                ),
                           ),
-                        ],
+                        },
                       ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

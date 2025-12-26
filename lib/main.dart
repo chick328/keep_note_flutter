@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:keep_note/presentation/ui/common/theme/app_typography.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'config/di/bloc_module.dart';
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Keep Note',
-      theme: ThemeData(useMaterial3: true, textTheme: appTypography),
+      theme: ThemeData(useMaterial3: true),
       routerConfig: route,
     );
   }

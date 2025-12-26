@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,8 +20,7 @@ class EditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
-        return GetIt.instance<EditBloc>()
-          ..add(EditEvent.fetchNoteById(id));
+        return GetIt.instance<EditBloc>()..add(EditEvent.fetchNoteById(id));
       },
       child: _EditLayout(),
     );
@@ -46,25 +46,39 @@ class _EditLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DismissKeyboard(
-      child: BlocBuilder<EditBloc, EditState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  context.read<EditBloc>().add(EditEvent.saveNote());
-                  context.pop();
-                },
-              ),
-              actions: [
+    return BlocPresentationListener<EditBloc, EditPresentationEvent>(
+      listener: (context, event) {
+        switch (event) {
+          case DeleteNoteSuccess():
+            context.pop();
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text('Delete Success')));
+          case DeleteNoteFailure():
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text('Delete Failure')));
+        }
+      },
+      child: DismissKeyboard(
+        child: BlocBuilder<EditBloc, EditState>(
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    context.read<EditBloc>().add(EditEvent.saveNote());
+                    context.pop();
+                  },
+                ),
+                actions: [
                   IconButton(
                     onPressed: () {
                       _scheduleNotificationDialogBuilder(
                         context,
-                        scheduledDateTime: state.note
-                            .scheduledNotificationDateTime,
+                        scheduledDateTime:
+                            state.note.scheduledNotificationDateTime,
                         onConfirm: (dateTime) {
                           context.read<EditBloc>().add(
                             EditEvent.scheduleNotification(dateTime),
@@ -74,174 +88,180 @@ class _EditLayout extends StatelessWidget {
                           context.read<EditBloc>().add(
                             EditEvent.cancelScheduledNotification(),
                           );
-                        }
+                        },
                       );
                     },
-                    icon: state.note.scheduledNotificationId != null &&
-                        state.note.scheduledNotificationDateTime != null
-                        ? Icon(Icons.notifications_active) : Icon(
-                        Icons.notifications_outlined),
+                    icon:
+                        state.note.scheduledNotificationId != null &&
+                            state.note.scheduledNotificationDateTime != null
+                        ? Icon(Icons.notifications_active)
+                        : Icon(Icons.notifications_outlined),
                   ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-              ],
-            ),
-            body: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsetsGeometry.symmetric(horizontal: 16.0),
-                  child: TextField(
-                    controller: TextEditingController(text: state.note.title)
-                      ..selection = TextSelection.collapsed(
-                        offset: state.note.title?.length ?? 0,
-                      ),
-                    autofocus: true,
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headlineLarge,
-                    decoration: InputDecoration.collapsed(
-                      hintText: "Title",
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      context.read<EditBloc>().add(
-                        EditEvent.onTitleChanged(value),
-                      );
+                  IconButton(
+                    onPressed: () {
+                      context.read<EditBloc>().add(EditEvent.deleteNote());
                     },
+                    icon: Icon(Icons.delete),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsetsGeometry.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
-                    ),
+                ],
+              ),
+              body: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsetsGeometry.symmetric(horizontal: 16.0),
                     child: TextField(
-                      controller:
-                      TextEditingController(text: state.note.content)
+                      controller: TextEditingController(text: state.note.title)
                         ..selection = TextSelection.collapsed(
-                          offset: state.note.content?.length ?? 0,
+                          offset: state.note.title?.length ?? 0,
                         ),
+                      autofocus: true,
                       maxLines: null,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyMedium,
                       keyboardType: TextInputType.multiline,
+                      style: Theme.of(context).textTheme.headlineLarge,
                       decoration: InputDecoration.collapsed(
-                        hintText: "Content",
+                        hintText: "Title",
                         border: InputBorder.none,
                       ),
                       onChanged: (value) {
                         context.read<EditBloc>().add(
-                          EditEvent.onContentChanged(value),
+                          EditEvent.onTitleChanged(value),
                         );
                       },
                     ),
                   ),
-                ),
-                if ((state.note.imagePaths ?? []).isNotEmpty) ...[
-                  Divider(),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SingleChildScrollView(
-                        padding: const EdgeInsetsGeometry.symmetric(
-                          horizontal: 16.0,
-                          vertical: 4.0,
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsetsGeometry.symmetric(
+                        vertical: 8.0,
+                        horizontal: 16.0,
+                      ),
+                      child: TextField(
+                        controller:
+                            TextEditingController(text: state.note.content)
+                              ..selection = TextSelection.collapsed(
+                                offset: state.note.content?.length ?? 0,
+                              ),
+                        maxLines: null,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration.collapsed(
+                          hintText: "Content",
+                          border: InputBorder.none,
                         ),
-                        scrollDirection: Axis.horizontal,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: constraints.maxWidth,
+                        onChanged: (value) {
+                          context.read<EditBloc>().add(
+                            EditEvent.onContentChanged(value),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  if ((state.note.imagePaths ?? []).isNotEmpty) ...[
+                    Divider(),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SingleChildScrollView(
+                          padding: const EdgeInsetsGeometry.symmetric(
+                            horizontal: 16.0,
+                            vertical: 4.0,
                           ),
-                          child: Row(
-                            spacing: 8.0,
-                            children: [
-                              for (String imagePath
-                              in state.note.imagePaths ?? [])
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  child: Image.file(
-                                    File(imagePath),
-                                    height: 100,
-                                    width: 100,
-                                    fit: BoxFit.fill,
-                                    errorBuilder: (_, _, _) {
-                                      return Container(
-                                        width: 100,
-                                        height: 100,
-                                        alignment: Alignment.center,
-                                        color: Colors.grey,
-                                        child: Icon(Icons.error_outline),
-                                      );
-                                    },
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: constraints.maxWidth,
+                            ),
+                            child: Row(
+                              spacing: 8.0,
+                              children: [
+                                for (String imagePath
+                                    in state.note.imagePaths ?? [])
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    child: Image.file(
+                                      File(imagePath),
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.fill,
+                                      errorBuilder: (_, _, _) {
+                                        return Container(
+                                          width: 100,
+                                          height: 100,
+                                          alignment: Alignment.center,
+                                          color: Colors.grey,
+                                          child: Icon(Icons.error_outline),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
+                  ],
+                  SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsetsGeometry.symmetric(
+                        horizontal: 16.0,
+                        vertical: 8.0,
+                      ),
+                      child: Row(
+                        spacing: 8.0,
+                        children: [
+                          IconButton(
+                            style: IconButton.styleFrom(
+                              backgroundColor: Colors.grey.withValues(
+                                alpha: 0.4,
+                              ),
+                            ),
+                            icon: Icon(Icons.photo_camera),
+                            onPressed: () {
+                              if (state.pickedImages.length <= 5) {
+                                _pickImage(context, ImageSource.camera);
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(content: Text('Reach Limit')),
+                                  );
+                              }
+                            },
+                          ),
+                          IconButton(
+                            style: IconButton.styleFrom(
+                              backgroundColor: Colors.grey.withValues(
+                                alpha: 0.4,
+                              ),
+                            ),
+                            icon: Icon(Icons.photo_rounded),
+                            onPressed: () {
+                              if (state.pickedImages.length < 5) {
+                                _pickImage(context, ImageSource.gallery);
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(content: Text('Reach Limit')),
+                                  );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsetsGeometry.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
-                    ),
-                    child: Row(
-                      spacing: 8.0,
-                      children: [
-                        IconButton(
-                          style: IconButton.styleFrom(
-                            backgroundColor: Colors.grey.withValues(alpha: 0.4),
-                          ),
-                          icon: Icon(Icons.photo_camera),
-                          onPressed: () {
-                            if (state.pickedImages.length <= 5) {
-                              _pickImage(context, ImageSource.camera);
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                ..hideCurrentSnackBar()
-                                ..showSnackBar(
-                                  SnackBar(content: Text('Reach Limit')),
-                                );
-                            }
-                          },
-                        ),
-                        IconButton(
-                          style: IconButton.styleFrom(
-                            backgroundColor: Colors.grey.withValues(alpha: 0.4),
-                          ),
-                          icon: Icon(Icons.photo_rounded),
-                          onPressed: () {
-                            if (state.pickedImages.length < 5) {
-                              _pickImage(context, ImageSource.gallery);
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                ..hideCurrentSnackBar()
-                                ..showSnackBar(
-                                  SnackBar(content: Text('Reach Limit')),
-                                );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future<void> _scheduleNotificationDialogBuilder(BuildContext parentContext, {
+  Future<void> _scheduleNotificationDialogBuilder(
+    BuildContext parentContext, {
     DateTime? scheduledDateTime,
     Function(DateTime dateTime)? onConfirm,
     Function()? onCancel,
@@ -249,7 +269,7 @@ class _EditLayout extends StatelessWidget {
     final currentDateTime = DateTime.now();
     DateTime initialDateTime;
 
-    if (scheduledDateTime!= null) {
+    if (scheduledDateTime != null) {
       if (scheduledDateTime.isBefore(currentDateTime)) {
         initialDateTime = currentDateTime.add(const Duration(hours: 1));
       } else {
@@ -280,10 +300,7 @@ class _EditLayout extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Schedule Notification",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .headlineMedium,
+                      style: Theme.of(context).textTheme.headlineMedium,
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -306,10 +323,7 @@ class _EditLayout extends StatelessWidget {
                     children: [
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: Theme
-                              .of(context)
-                              .textTheme
-                              .labelLarge,
+                          textStyle: Theme.of(context).textTheme.labelLarge,
                         ),
                         child: const Text('Cancel'),
                         onPressed: () {
@@ -320,10 +334,7 @@ class _EditLayout extends StatelessWidget {
                       Expanded(child: SizedBox.shrink()),
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: Theme
-                              .of(context)
-                              .textTheme
-                              .labelLarge,
+                          textStyle: Theme.of(context).textTheme.labelLarge,
                         ),
                         child: const Text('Back'),
                         onPressed: () {
@@ -332,10 +343,7 @@ class _EditLayout extends StatelessWidget {
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: Theme
-                              .of(context)
-                              .textTheme
-                              .labelLarge,
+                          textStyle: Theme.of(context).textTheme.labelLarge,
                         ),
                         child: const Text('Confirm'),
                         onPressed: () {

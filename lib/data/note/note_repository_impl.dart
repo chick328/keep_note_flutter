@@ -30,7 +30,7 @@ class NoteRepositoryImpl extends NoteRepository {
         await _database.open();
       }
 
-      await _database.noteDao?.deleteById(note.id!);
+      await _database.noteDao?.deleteById(note.id);
       return Result.success(null);
     } on Exception catch (e) {
       return Result.error(e);

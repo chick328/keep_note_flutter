@@ -9,4 +9,5 @@ sealed class EditEvent with _$EditEvent  {
   const factory EditEvent.pickImages(List<File> images) = _PickImages;
   const factory EditEvent.scheduleNotification(DateTime dateTime) = _ScheduleNotification;
   const factory EditEvent.cancelScheduledNotification() = _CancelScheduleNotification;
+  const factory EditEvent.deleteNote() = _DeleteNote;
 }
