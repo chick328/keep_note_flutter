@@ -26,11 +26,12 @@ lib/
 
 ## Screenshots
 #### Listing Screen
-![Listing in Grid](images/Simulator Screenshot - iPhone 16e - 2025-12-27 at 05.59.40.png)
-![Listing in List](images/Simulator Screenshot - iPhone 16e - 2025-12-27 at 05.59.52.png)
-![Search](images/Simulator Screenshot - iPhone 16e - 2025-12-27 at 06.00.49.png)
+![Listing in Grid](images/listing_grid.png)
+![Listing in List](images/listing_list.png)
+![Search](images/search.png)
+
 #### Edit Screen
-![new edit screen](images/Simulator Screenshot - iPhone 16e - 2025-12-27 at 06.03.38.png)
-![Edit screen with id](images/Simulator Screenshot - iPhone 16e - 2025-12-27 at 06.01.24.png)
-![Set noti](images/Simulator Screenshot - iPhone 16e - 2025-12-27 at 06.02.01.png)
-![noti](images/Simulator Screenshot - iPhone 16e - 2025-12-27 at 06.03.02.png)
+![New Note](images/edit_new.png)
+![Edit Existing Note](images/edit_with_id.png)
+![Set Notification](images/set_notification.png)
+![Notification Example](images/notification.png)
