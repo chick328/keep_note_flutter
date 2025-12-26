@@ -26,12 +26,12 @@ lib/
 
 ## Screenshots
 #### Listing Screen
-![Listing in Grid](images/listing_grid.png)
-![Listing in List](images/listing_list.png)
-![Search](images/search.png)
+<img src="images/listing_grid.png" width="300"/> 
+<img src="images/listing_list.png" width="300"/>
+<img src="images/search.png" width="300"/>
 
-#### Edit Screen
-![New Note](images/edit_new.png)
-![Edit Existing Note](images/edit_with_id.png)
-![Set Notification](images/set_notification.png)
-![Notification Example](images/notification.png)
+#### Edit & Notification Screen
+<img src="images/edit_new.png" width="300"/> 
+<img src="images/edit_with_id.png" width="300"/>
+<img src="images/set_notification.png" width="300"/> 
+<img src="images/notification.png" width="300"/>
