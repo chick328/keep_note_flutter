@@ -58,6 +58,14 @@ class _EditLayout extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(content: Text('Delete Failure')));
+          case ScheduleNotiSuccess():
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text('You have scheduled a notification')));
+          case CancelScheduledNotiSuccess():
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text('You have canceled the notification')));
         }
       },
       child: DismissKeyboard(

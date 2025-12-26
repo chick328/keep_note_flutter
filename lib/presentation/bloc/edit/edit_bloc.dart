@@ -80,6 +80,7 @@ class EditBloc extends Bloc<EditEvent, EditState>
           );
           if (result is Success<Note>) {
               emit(state.copyWith(note: result.value));
+              emitPresentation(EditPresentationEvent.scheduleNotiSuccess());
           }
         },
         cancelScheduledNotification: (_) async {
@@ -88,6 +89,7 @@ class EditBloc extends Bloc<EditEvent, EditState>
           );
           if (result is Success<Note>) {
             emit(state.copyWith(note: result.value));
+            emitPresentation(EditPresentationEvent.cancelScheduledNotiSuccess());
           }
         },
         deleteNote: (_) async {

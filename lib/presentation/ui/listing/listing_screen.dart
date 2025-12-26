@@ -150,12 +150,12 @@ class _ListingLayoutState extends State<_ListingLayout> {
                                         final item = searchResult[index];
                                         return ListTile(
                                           title: Text(
-                                            item.content ?? "",
+                                            item.title ?? "",
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           subtitle: Text(
-                                            item.title ?? "",
+                                            item.content ?? "",
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),

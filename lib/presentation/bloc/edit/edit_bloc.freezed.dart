@@ -683,12 +683,14 @@ extension EditPresentationEventPatterns on EditPresentationEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DeleteNoteSuccess value)?  deleteNoteSuccess,TResult Function( DeleteNoteFailure value)?  deleteNoteFailure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DeleteNoteSuccess value)?  deleteNoteSuccess,TResult Function( DeleteNoteFailure value)?  deleteNoteFailure,TResult Function( ScheduleNotiSuccess value)?  scheduleNotiSuccess,TResult Function( CancelScheduledNotiSuccess value)?  cancelScheduledNotiSuccess,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case DeleteNoteSuccess() when deleteNoteSuccess != null:
 return deleteNoteSuccess(_that);case DeleteNoteFailure() when deleteNoteFailure != null:
-return deleteNoteFailure(_that);case _:
+return deleteNoteFailure(_that);case ScheduleNotiSuccess() when scheduleNotiSuccess != null:
+return scheduleNotiSuccess(_that);case CancelScheduledNotiSuccess() when cancelScheduledNotiSuccess != null:
+return cancelScheduledNotiSuccess(_that);case _:
   return orElse();
 
 }
@@ -706,12 +708,14 @@ return deleteNoteFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DeleteNoteSuccess value)  deleteNoteSuccess,required TResult Function( DeleteNoteFailure value)  deleteNoteFailure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DeleteNoteSuccess value)  deleteNoteSuccess,required TResult Function( DeleteNoteFailure value)  deleteNoteFailure,required TResult Function( ScheduleNotiSuccess value)  scheduleNotiSuccess,required TResult Function( CancelScheduledNotiSuccess value)  cancelScheduledNotiSuccess,}){
 final _that = this;
 switch (_that) {
 case DeleteNoteSuccess():
 return deleteNoteSuccess(_that);case DeleteNoteFailure():
-return deleteNoteFailure(_that);}
+return deleteNoteFailure(_that);case ScheduleNotiSuccess():
+return scheduleNotiSuccess(_that);case CancelScheduledNotiSuccess():
+return cancelScheduledNotiSuccess(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -725,12 +729,14 @@ return deleteNoteFailure(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DeleteNoteSuccess value)?  deleteNoteSuccess,TResult? Function( DeleteNoteFailure value)?  deleteNoteFailure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DeleteNoteSuccess value)?  deleteNoteSuccess,TResult? Function( DeleteNoteFailure value)?  deleteNoteFailure,TResult? Function( ScheduleNotiSuccess value)?  scheduleNotiSuccess,TResult? Function( CancelScheduledNotiSuccess value)?  cancelScheduledNotiSuccess,}){
 final _that = this;
 switch (_that) {
 case DeleteNoteSuccess() when deleteNoteSuccess != null:
 return deleteNoteSuccess(_that);case DeleteNoteFailure() when deleteNoteFailure != null:
-return deleteNoteFailure(_that);case _:
+return deleteNoteFailure(_that);case ScheduleNotiSuccess() when scheduleNotiSuccess != null:
+return scheduleNotiSuccess(_that);case CancelScheduledNotiSuccess() when cancelScheduledNotiSuccess != null:
+return cancelScheduledNotiSuccess(_that);case _:
   return null;
 
 }
@@ -747,11 +753,13 @@ return deleteNoteFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  deleteNoteSuccess,TResult Function()?  deleteNoteFailure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  deleteNoteSuccess,TResult Function()?  deleteNoteFailure,TResult Function()?  scheduleNotiSuccess,TResult Function()?  cancelScheduledNotiSuccess,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case DeleteNoteSuccess() when deleteNoteSuccess != null:
 return deleteNoteSuccess();case DeleteNoteFailure() when deleteNoteFailure != null:
-return deleteNoteFailure();case _:
+return deleteNoteFailure();case ScheduleNotiSuccess() when scheduleNotiSuccess != null:
+return scheduleNotiSuccess();case CancelScheduledNotiSuccess() when cancelScheduledNotiSuccess != null:
+return cancelScheduledNotiSuccess();case _:
   return orElse();
 
 }
@@ -769,11 +777,13 @@ return deleteNoteFailure();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  deleteNoteSuccess,required TResult Function()  deleteNoteFailure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  deleteNoteSuccess,required TResult Function()  deleteNoteFailure,required TResult Function()  scheduleNotiSuccess,required TResult Function()  cancelScheduledNotiSuccess,}) {final _that = this;
 switch (_that) {
 case DeleteNoteSuccess():
 return deleteNoteSuccess();case DeleteNoteFailure():
-return deleteNoteFailure();}
+return deleteNoteFailure();case ScheduleNotiSuccess():
+return scheduleNotiSuccess();case CancelScheduledNotiSuccess():
+return cancelScheduledNotiSuccess();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -787,11 +797,13 @@ return deleteNoteFailure();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  deleteNoteSuccess,TResult? Function()?  deleteNoteFailure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  deleteNoteSuccess,TResult? Function()?  deleteNoteFailure,TResult? Function()?  scheduleNotiSuccess,TResult? Function()?  cancelScheduledNotiSuccess,}) {final _that = this;
 switch (_that) {
 case DeleteNoteSuccess() when deleteNoteSuccess != null:
 return deleteNoteSuccess();case DeleteNoteFailure() when deleteNoteFailure != null:
-return deleteNoteFailure();case _:
+return deleteNoteFailure();case ScheduleNotiSuccess() when scheduleNotiSuccess != null:
+return scheduleNotiSuccess();case CancelScheduledNotiSuccess() when cancelScheduledNotiSuccess != null:
+return cancelScheduledNotiSuccess();case _:
   return null;
 
 }
@@ -855,6 +867,70 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'EditPresentationEvent.deleteNoteFailure()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class ScheduleNotiSuccess implements EditPresentationEvent {
+  const ScheduleNotiSuccess();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScheduleNotiSuccess);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'EditPresentationEvent.scheduleNotiSuccess()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CancelScheduledNotiSuccess implements EditPresentationEvent {
+  const CancelScheduledNotiSuccess();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CancelScheduledNotiSuccess);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'EditPresentationEvent.cancelScheduledNotiSuccess()';
 }
 
 
