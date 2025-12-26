@@ -26,12 +26,8 @@ lib/
 
 ## Screenshots
 #### Listing Screen
-<img src="images/listing_grid.png" width="300"/> 
-<img src="images/listing_list.png" width="300"/>
-<img src="images/search.png" width="300"/>
+<img src="images/listing_grid.png" width="300"/> <img src="images/listing_list.png" width="300"/> <img src="images/search.png" width="300"/>
 
 #### Edit & Notification Screen
-<img src="images/edit_new.png" width="300"/> 
-<img src="images/edit_with_id.png" width="300"/>
-<img src="images/set_notification.png" width="300"/> 
-<img src="images/notification.png" width="300"/>
+<img src="images/edit_new.png" width="300"/> <img src="images/edit_with_id.png" width="300"/>
+<img src="images/set_notification.png" width="300"/> <img src="images/notification.png" width="300"/>
